@@ -17,10 +17,11 @@ class Canvas extends Component {
 	}
 
 	getLinePath = line => {
-		return line.reduce((pathString, point) => {
+		return line.reduce((pathString, point, i) => {
 			const x = point[0]
 			const y = point[1]
-			return `${pathString} L${x} ${y}`
+			if (!i) return `M ${x} ${y}`
+			return `${pathString} L ${x} ${y}`
 		}, "")
 	}
 
@@ -30,7 +31,7 @@ class Canvas extends Component {
 
 	renderLine = path => {
 		return <svg>
-			<path d={path} />
+			<path d={path} fill="white" stroke="red" />
 		</svg>
 	}
 
