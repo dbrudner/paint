@@ -30,9 +30,7 @@ class Canvas extends Component {
 	}
 
 	renderLine = path => {
-		return <svg>
-			<path d={path} fill="white" stroke="red" />
-		</svg>
+		return <path d={path} fill="white" stroke="red" />
 	}
 
 	renderLines = lines => {
@@ -51,7 +49,9 @@ class Canvas extends Component {
 			onMouseUp={e => this.props.handleOnMouseUp(e)} 
 			onMouseDown={e => this.props.handleOnMouseDown(e)} 
 			style={canvasStyle}>
-				{this.props.lines.length ? this.renderLines(this.getLinePaths(this.props.lines)) : null}
+				<svg style={{width: "1000px", height: "500px"}}>
+					{this.props.lines.length ? this.renderLines(this.getLinePaths(this.props.lines)) : null}
+				</svg>
 			</div>
 		)
 	}
