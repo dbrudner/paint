@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import Canvas from './canvas';
 import ColorPicker from './color-picker';
+import Toolbar from './toolbar';
+
+const style = {
+	backgroundColor: "#dedede",
+	width: "100%",
+	height: "100vh"
+}
 
 class App extends Component {
 
@@ -17,13 +24,13 @@ class App extends Component {
 
 	render() {
 		return (
-			<div>
-				<h1>Paint</h1>
+			<div style={style}>
+				<h1 style={{margin: 0}}>Paint</h1>
 				<Canvas color={this.state.color} />
-				<ColorPicker getColor={this.handleChange} color={this.state.color} />
+				<Toolbar handleChange={this.handleChange} />
 			</div>
 		);
+		}
 	}
-}
 
 export default App;

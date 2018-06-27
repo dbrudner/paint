@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 
 const canvasStyle = {
-	border: "1px solid black",
-	margin: "50px 50px 0 50px"
+	position: "fixed",
+	top: "100px",
+	left: "250px",
+	border: "2px solid #cccccc",
+	borderRadius: "5px",
+	backgroundColor: "white"
 }
 
 class Canvas extends Component {
@@ -52,11 +56,12 @@ class Canvas extends Component {
 	}
 
 	drawLine = () => {
+		console.log(this.state.line[0])
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
-		ctx.moveTo(this.state.line[0][0] - 50, this.state.line[0][1] - 130)
+		ctx.moveTo(this.state.line[0][0] - 250, this.state.line[0][1] - 100)
 		this.state.line.forEach(point => {
-			ctx.lineTo(point[0] - 50, point[1] - 130)
+			ctx.lineTo(point[0] - 250, point[1] - 104)
 			ctx.strokeStyle = this.props.color
 			ctx.lineWidth = 10
 			ctx.stroke();
