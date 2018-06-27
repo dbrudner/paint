@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 const canvasStyle = {
 	border: "1px solid black",
-	height: "500px",
-	width: "1000px",
 	margin: "50px 50px 0 50px"
 }
 
@@ -11,50 +9,77 @@ class Canvas extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {  
+		this.state = {
 			color: "",
+			drawing: false,
+			line: [],
+			lines: []
 		}
 	}
 
-	getLinePath = line => {
-		return line.reduce((pathString, point, i) => {
-			const x = point[0]
-			const y = point[1]
-			if (!i) return `M ${x} ${y}`
-			return `${pathString} L ${x} ${y}`
-		}, "")
+	maybeOnClick() {
+		const ctx = this.refs.canvas.getContext('2d');
+		ctx.beginPath();
+		ctx.moveTo(50, 50)
+		ctx.lineTo(100, 100);
+		ctx.stroke();
 	}
 
-	getLinePaths = lines => {
-		return lines.map(line => this.getLinePath(line));
+	handleChange = (name, value) => this.setState({[name]: value})
+
+	handleOnMouseDown = e => {
+		const { clientX, clientY } = e;
+		this.setState({
+			drawing: true,
+			line: [[clientX, clientY]]
+		})
+		this.recordLine(e);
 	}
 
-	renderLine = path => {
-		return <path d={path} fill="white" stroke="red" />
+	handleOnMouseUp = e => {
+		this.setState({
+			drawing: false,
+			// lines: [...this.state.lines, this.state.line]
+		})
 	}
 
-	renderLines = lines => {
-		return lines.map(line => this.renderLine(line));
+	recordLine = (e) => {
+		if (!this.state.drawing) return;
+		const { clientX, clientY } = e;
+
+		this.setState({line: [...this.state.line, [clientX, clientY]]});
+		this.drawLine();
 	}
 
-	render() { 
-		if (this.props.lines.length) {
-			console.log("HI");
-			console.log(this.getLinePaths(this.props.lines))
-		}
+	drawLine = () => {
+		const ctx = this.refs.canvas.getContext('2d');
+		ctx.beginPath();
+		ctx.moveTo(this.state.line[0][0] - 50, this.state.line[0][1] - 130)
+		this.state.line.forEach(point => {
+			ctx.lineTo(point[0] - 50, point[1] - 130)
+			ctx.strokeStyle = this.props.color
+			ctx.lineWidth = 10
+			ctx.stroke();
+		})
+	}
 
-		return (  
-			<div 
-			onMouseMove={e => this.props.drawLine(e)} 
-			onMouseUp={e => this.props.handleOnMouseUp(e)} 
-			onMouseDown={e => this.props.handleOnMouseDown(e)} 
-			style={canvasStyle}>
-				<svg style={{width: "1000px", height: "500px"}}>
-					{this.props.lines.length ? this.renderLines(this.getLinePaths(this.props.lines)) : null}
-				</svg>
-			</div>
+
+	render() {
+
+		return (
+			<canvas
+				onMouseMove={e => this.recordLine(e)}
+				onMouseUp={e => this.handleOnMouseUp(e)}
+				onMouseDown={e => this.handleOnMouseDown(e)}
+				onMouseLeave={() => this.setState({drawing: false})}
+				style={canvasStyle}
+				height={500}
+				width={1000}
+				ref="canvas"
+			>
+			</canvas>
 		)
 	}
 }
- 
+
 export default Canvas;
