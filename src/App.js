@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import Canvas from './canvas';
-import Toolbar from './toolbar';
-import ColorPicker from './color-picker';
-import Navbar from './navbar';
+import Canvas from './canvas/';
+import Toolbar from './toolbar/';
+import Navbar from './nav/';
 import styled from 'styled-components';
-import Header from './header';
+import Header from './nav/header';
 
 const style = {
 	backgroundColor: "#dedede",

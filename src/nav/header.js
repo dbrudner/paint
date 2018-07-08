@@ -6,7 +6,7 @@ const Head = styled.div`
 	background-color: #808080;
 	padding: 2px 4px 3px 4px;
 	h1 {
-		font-size: 14px;
+		font-size: 13px;
 		margin: 0;
 		color: #bcbcbc;
 	}
