@@ -49,7 +49,7 @@ class ToolBar extends Component {
 			<ToolBarContainer>
 				<Button></Button>
 				<Button></Button>
-				<Button></Button>
+				<Button><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
