@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ColorPicker from './color-picker';
 import styled from 'styled-components';
 import { Button } from './button';
 import DetailPane from './detail-pane/'
+import ColorPicker from '../footer/color-picker'
 
 const ToolBarContainer = styled.div`
 	width: 39px;
@@ -23,7 +23,8 @@ class ToolBar extends Component {
 			top: "100px",
 			left: "100px",
 			dragBarX: 0,
-			dragBarY: 0
+			dragBarY: 0,
+			selected: null
 		}
 	}
 
@@ -49,12 +50,12 @@ class ToolBar extends Component {
 			<ToolBarContainer>
 				<Button></Button>
 				<Button></Button>
-				<Button><i className="fas fa-eraser"></i></Button>
+				<Button onClick={() => this.handleChange("selected", "eraser")}><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<Button><i className="fas fa-paint-brush"></i></Button>
+				<Button onClick={() => this.handleChange("selected", "brushSize")}><i className="fas fa-paint-brush"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
@@ -63,7 +64,8 @@ class ToolBar extends Component {
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<DetailPane handleChange={this.props.handleChange}/>
+				<ColorPicker getColor={this.props.handleChange} />
+				<DetailPane selected={this.state.selected} handleChange={this.props.handleChange}/>
 			</ToolBarContainer>
 		)
 	}

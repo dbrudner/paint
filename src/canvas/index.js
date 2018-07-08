@@ -93,6 +93,8 @@ class Canvas extends Component {
 					onMouseDown={e => this.handleOnMouseDown(e)}
 					onMouseLeave={() => this.setState({drawing: false})}
 					ref="canvas"
+					width="800px"
+					height="400px"
 				/>
 			</Container>
 			

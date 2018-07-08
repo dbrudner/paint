@@ -18,14 +18,20 @@ class DetailPain extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pane: "eraser"
+			pane: this.props.selected
 		}
 	}
+
+	handleChange = (name, value) => this.setState({[name]: value})
+
 	render() {
+
+		console.log(this.props.selected);
+
 		return (
 			<DetailPaneContainer>
-				{this.state.pane === "brushSize" ? <BrushSize handleChange={this.props.handleChange}/> : null}
-				{this.state.pane === "eraser" ? <Eraser handleChange={this.props.handleChange}/> : null}				
+				{this.props.selected === "brushSize" ? <BrushSize handleChange={this.props.handleChange}/> : null}
+				{this.props.selected === "eraser" ? <Eraser handleChange={this.props.handleChange}/> : null}				
 			</DetailPaneContainer>
 		)
 	}

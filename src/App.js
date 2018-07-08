@@ -4,6 +4,7 @@ import Toolbar from './toolbar/';
 import Navbar from './nav/';
 import styled from 'styled-components';
 import Header from './nav/header';
+import Footer from './footer/';
 
 const style = {
 	backgroundColor: "#dedede",
@@ -47,6 +48,7 @@ class App extends Component {
 					<Toolbar handleChange={this.handleChange} getColor={this.handleChange} color={this.state.color} />
 					<Canvas brushSize={this.state.brushSize} color={this.state.color} />
 				</AppContainer>
+				{/* <Footer handleChange={this.handleChange} /> */}
 			</Window>
 		);
 	}
