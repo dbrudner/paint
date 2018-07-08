@@ -7,11 +7,25 @@ const style = {
 	margin: "10px",
 	padding: "10px",
 	width: "150px",
+	backgroundColor: "white"
 }
 
 const brushes = {
 	display: "flex",
 	justifyContent: "space-around"
+}
+
+const BrushesWindow = props => {
+	return <div style={style}>
+		<p>Pick a size</p>
+		<div style={brushes}>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="20"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="15"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="10"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="5"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="2"/>
+		</div>
+	</div>
 }
 
 export default class BrushSize extends Component {
@@ -20,7 +34,12 @@ export default class BrushSize extends Component {
 		this.state = {open: false}
 	}
 
-	handleChange = size => this.props.handleChange("brushSize", size)
+	closeBrushWindow = () => this.setState({open: !this.state.open})
+
+	handleChange = (name, value) => {
+		console.log(name, value);
+		this.props.handleChange(name, value)
+	}
 
 	render() {
 		return (
@@ -28,16 +47,7 @@ export default class BrushSize extends Component {
 				<button onClick={() => this.setState({open: !this.state.open})}>
 					<i className="fas fa-paint-brush"></i>
 				</button>
-				<div style={style}>
-					<p>Pick a size</p>
-					<div style={brushes}>
-						<BrushSizeDot handleChange={this.handleChange} size="20"/>
-						<BrushSizeDot handleChange={this.handleChange} size="15"/>
-						<BrushSizeDot handleChange={this.handleChange} size="10"/>
-						<BrushSizeDot handleChange={this.handleChange} size="5"/>
-						<BrushSizeDot handleChange={this.handleChange} size="2"/>
-					</div>
-				</div>
+				{this.state.open ? <BrushesWindow closeBrushWindow={this.closeBrushWindow} handleChange={this.handleChange}/> : null}
 			</div>
 		)
 	}
