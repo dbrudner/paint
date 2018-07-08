@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ColorPicker from './color-picker';
-import BrushSize from './brush-size';
 import styled from 'styled-components';
 import { Button } from './button';
+import DetailPane from './detail-pane/'
 
 const ToolBarContainer = styled.div`
 	width: 39px;
@@ -48,21 +48,22 @@ class ToolBar extends Component {
 		return (
 			<ToolBarContainer>
 				<Button></Button>
-				<Button right></Button>
 				<Button></Button>
-				<Button right></Button>
 				<Button></Button>
-				<Button right></Button>
 				<Button></Button>
-				<Button right></Button>
 				<Button></Button>
-				<Button right></Button>
 				<Button></Button>
-				<Button right></Button>
 				<Button></Button>
-				<Button right></Button>
+				<Button><i className="fas fa-paint-brush"></i></Button>
 				<Button></Button>
-				<Button right></Button>
+				<Button></Button>
+				<Button></Button>
+				<Button></Button>
+				<Button></Button>
+				<Button></Button>
+				<Button></Button>
+				<Button></Button>
+				<DetailPane handleChange={this.props.handleChange}/>
 			</ToolBarContainer>
 		)
 	}
