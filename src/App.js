@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Canvas from './canvas';
-import ColorPicker from './color-picker';
+import Toolbar from './toolbar';
 
 class App extends Component {
 
@@ -9,7 +9,7 @@ class App extends Component {
 
 		this.state = {
 			color: "",
-			
+			brushSize: 10
 		}
 	}
 
@@ -19,8 +19,8 @@ class App extends Component {
 		return (
 			<div>
 				<h1>Paint</h1>
-				<Canvas color={this.state.color} />
-				<ColorPicker getColor={this.handleChange} color={this.state.color} />
+				<Toolbar handleChange={this.handleChange} getColor={this.handleChange} color={this.state.color} />
+				<Canvas brushSize={this.state.brushSize} color={this.state.color} />
 			</div>
 		);
 	}

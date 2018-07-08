@@ -29,9 +29,14 @@ class Canvas extends Component {
 
 	handleOnMouseDown = e => {
 		const { clientX, clientY } = e;
+		const canvas = document.getElementById("canvas");
+		const { top, left } = canvas.getBoundingClientRect();
+		console.log(top, left);
+
 		this.setState({
 			drawing: true,
-			line: [[clientX, clientY]]
+			line: [[clientX, clientY]],
+			top, left
 		})
 		this.recordLine(e);
 	}
@@ -54,20 +59,20 @@ class Canvas extends Component {
 	drawLine = () => {
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
-		ctx.moveTo(this.state.line[0][0] - 50, this.state.line[0][1] - 130)
+		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top)
 		this.state.line.forEach(point => {
-			ctx.lineTo(point[0] - 50, point[1] - 130)
+			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top)
 			ctx.strokeStyle = this.props.color
-			ctx.lineWidth = 10
+			ctx.lineWidth = this.props.brushSize
 			ctx.stroke();
 		})
 	}
-
 
 	render() {
 
 		return (
 			<canvas
+				id="canvas"
 				onMouseMove={e => this.recordLine(e)}
 				onMouseUp={e => this.handleOnMouseUp(e)}
 				onMouseDown={e => this.handleOnMouseDown(e)}
@@ -76,8 +81,7 @@ class Canvas extends Component {
 				height={500}
 				width={1000}
 				ref="canvas"
-			>
-			</canvas>
+			/>
 		)
 	}
 }
