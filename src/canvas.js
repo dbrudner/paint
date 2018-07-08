@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
-const canvasStyle = {
-	position: "fixed",
-	top: "100px",
-	left: "250px",
-	border: "2px solid #cccccc",
-	borderRadius: "5px",
-	backgroundColor: "white"
-}
+const Container = styled.div`
+	display: inline-block;
+	background-color: #6f6f6f;
+	padding: 20px 200px 200px 20px;
+	width: 100%;
+	border: 2px solid;
+    border-bottom-color: #c7c7c7;
+    border-right-color: #c7c7c7;
+    border-left-color: #808080;
+    border-top-color: #808080;
+    background-color: #7b7b7b;
+	padding: 10px;
+	
+	canvas {
+		background-color: white;
+	}
+`
 
 class Canvas extends Component {
 
@@ -74,19 +84,18 @@ class Canvas extends Component {
 	}
 
 	render() {
-
 		return (
-			<canvas
-				id="canvas"
-				onMouseMove={e => this.recordLine(e)}
-				onMouseUp={e => this.handleOnMouseUp(e)}
-				onMouseDown={e => this.handleOnMouseDown(e)}
-				onMouseLeave={() => this.setState({drawing: false})}
-				style={canvasStyle}
-				height={500}
-				width={1000}
-				ref="canvas"
-			/>
+			<Container>
+				<canvas
+					id="canvas"
+					onMouseMove={e => this.recordLine(e)}
+					onMouseUp={e => this.handleOnMouseUp(e)}
+					onMouseDown={e => this.handleOnMouseDown(e)}
+					onMouseLeave={() => this.setState({drawing: false})}
+					ref="canvas"
+				/>
+			</Container>
+			
 		)
 	}
 }

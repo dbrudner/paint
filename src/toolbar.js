@@ -33,17 +33,11 @@ class ToolBar extends Component {
 			height: "484px",
 			padding: "2px",
 			paddingTop: "25px",
-			marginLeft: "20px",
-			borderRadius: "5px",
-			backgroundColor: "#f3f3f3",
-			position: "fixed",
-			top: this.state.top,
-			left: this.state.bottom
+			backgroundColor: "rgb(191, 191, 191)",
 		}
 		return (
 			<div style={style} >
-				<DragBar x={this.state.dragBarX} y={this.state.dragBarY} reposition={this.reposition}/>
-				<ColorPicker getColor={this.props.handleChange} color={this.state.color} />'
+				<ColorPicker getColor={this.props.handleChange} color={this.state.color} />
 				<BrushSize handleChange={this.props.handleChange} />				
 			</div>
 		)
