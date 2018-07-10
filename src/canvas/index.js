@@ -85,26 +85,52 @@ class Canvas extends Component {
 		});
 	}
 
-	drawSquare = () => {
-		const ctx = this.refs.canvas.getContext('2d');
+	drawPreview = coords => {
+		// const { left, top, right, bottom } = coords;
+		// const width = left - right;
+		// const height = top - bottom;
 
-		// getPoint = line => {
-		// 	return line.reduce((x, point) => {
-		// 		if (!x) return point;
-		// 		if (Math.abs(point) > Math.abs(x)) return x
-		// 	}, null)
+		// const style = {
+		// 	position: "fixed",
+		// 	top,
+		// 	left
 		// }
 
+		// return <svg width={width} height={height}>
+		// 	<rect width={width} height={height} style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+		// </svg>
+		console.log("Prew")
+
+		const style = {
+			fill: "rgb(0,0,255)",
+			strokeWidth: 3,
+			stroke: "rgb(0,0,0)",
+		}
+
+
+		return (
+			<svg width="400" height="110">
+				<rect width="300" height="100" style={style} />
+			</svg>
+		)
+
+	}
+
+	drawSquare = () => {
+		const ctx = this.refs.canvas.getContext('2d');
 
 		const left = this.state.line[0][0] - this.state.left
 		const top = this.state.line[0][1] - this.state.top
 		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
 		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
 
+		this.drawPreview({left, top, right, bottom});
+
 		if (!this.state.drawSquareMouseUp) return;
 
 		ctx.beginPath();
 		ctx.lineWidth = 5;
+		ctx.strokeStyle = this.props.color;
 		ctx.moveTo(left, top);
 		ctx.lineTo(right, top);
 		ctx.lineTo(right, bottom);
@@ -118,6 +144,8 @@ class Canvas extends Component {
 	render() {
 		return (
 			<Container>
+				{/* { this.state.drawPreview ? this.drawPreview() : null } */}
+				{this.drawPreview()}
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
