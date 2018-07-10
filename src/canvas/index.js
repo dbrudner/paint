@@ -28,17 +28,10 @@ class Canvas extends Component {
 			drawing: false,
 			line: [],
 			lines: [],
-			drawSquareMouseUp: false
+			drawSquareMouseUp: false,
+			drawPreview: false
 		}
 	}
-
-	// maybeOnClick() {
-	// 	const ctx = this.refs.canvas.getContext('2d');
-	// 	ctx.beginPath();
-	// 	ctx.moveTo(50, 50)
-	// 	ctx.lineTo(100, 100);
-	// 	ctx.stroke();
-	// }
 
 	handleChange = (name, value) => this.setState({[name]: value})
 
@@ -46,18 +39,22 @@ class Canvas extends Component {
 		const canvas = document.getElementById("canvas");
 		const { top, left } = canvas.getBoundingClientRect();
 		const { clientX, clientY } = e;
+		const { method } = this.props.method
 
 		this.setState({
-			method: this.props.method,
+			method,
 			line: [[clientX, clientY]],
 			top, left
+		}, () => {
+			if (method === "drawSquare") {
+				this.setState({ drawPreview: false })
+			}
 		});
 	}
 
 	handleOnMouseUp = () => {
 		if (this.state.method === "drawLine") return
 		else if (this.state.method === "drawSquare") {
-			console.log("End prev")
 			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
 		}
@@ -72,7 +69,6 @@ class Canvas extends Component {
 	handleMethod = () => {
 		if (this.state.method === "drawLine") return this.drawLine();
 		if (this.state.method === "drawSquare") {
-			this.setState({drawPreview: true})			
 			return this.drawSquare()
 		};
 	}
@@ -154,7 +150,6 @@ class Canvas extends Component {
 	}
 
 	render() {
-		console.log(this.state.drawPreview);
 
 		return (
 			<Container>
