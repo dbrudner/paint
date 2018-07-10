@@ -13,7 +13,7 @@ const Container = styled.div`
     border-top-color: #808080;
     background-color: #7b7b7b;
 	padding: 10px;
-	
+
 	canvas {
 		background-color: white;
 	}
@@ -27,61 +27,92 @@ class Canvas extends Component {
 			color: "",
 			drawing: false,
 			line: [],
-			lines: []
+			lines: [],
+			drawSquareMouseUp: false
 		}
 	}
 
-	maybeOnClick() {
-		const ctx = this.refs.canvas.getContext('2d');
-		ctx.beginPath();
-		ctx.moveTo(50, 50)
-		ctx.lineTo(100, 100);
-		ctx.stroke();
-	}
+	// maybeOnClick() {
+	// 	const ctx = this.refs.canvas.getContext('2d');
+	// 	ctx.beginPath();
+	// 	ctx.moveTo(50, 50)
+	// 	ctx.lineTo(100, 100);
+	// 	ctx.stroke();
+	// }
 
 	handleChange = (name, value) => this.setState({[name]: value})
 
 	handleOnMouseDown = e => {
-
-		const { clientX, clientY } = e;
 		const canvas = document.getElementById("canvas");
 		const { top, left } = canvas.getBoundingClientRect();
+		const { clientX, clientY } = e;
 
-		if (this.props.method === "drawLine") {
-			this.setState({
-				method: this.props.method,
-				line: [[clientX, clientY]],
-				top, left
-			})
-			this.recordLine(e);
+		this.setState({
+			method: this.props.method,
+			line: [[clientX, clientY]],
+			top, left
+		});
+	}
+
+	handleOnMouseUp = () => {
+		if (this.state.method === "drawLine") return
+		else if (this.state.method === "drawSquare") {
+			this.setState({ drawSquareMouseUp: true })
+			return this.drawSquare()
 		}
 	}
 
-	handleOnMouseUp = e => {
-		this.setState({
-			method: "",
-			// lines: [...this.state.lines, this.state.line]
-		})
+	getPath = e => {
+		const { clientX, clientY } = e;
+		this.setState({line: [...this.state.line, [clientX, clientY]]});
+		this.handleMethod();
 	}
 
-	recordLine = (e) => {
-		if (this.state.method !== "drawLine") return;
-		const { clientX, clientY } = e;
-
-		this.setState({line: [...this.state.line, [clientX, clientY]]});
-		this.drawLine();
+	handleMethod = () => {
+		if (this.state.method === "drawLine") return this.drawLine();
+		if (this.state.method === "drawSquare") return this.drawSquare();
 	}
 
 	drawLine = () => {
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
-		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top)
+		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
 		this.state.line.forEach(point => {
-			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top)
-			ctx.strokeStyle = this.props.color
-			ctx.lineWidth = this.props.brushSize
+			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
+			ctx.strokeStyle = this.props.color;
+			ctx.lineWidth = this.props.brushSize;
 			ctx.stroke();
-		})
+		});
+	}
+
+	drawSquare = () => {
+		const ctx = this.refs.canvas.getContext('2d');
+
+		// getPoint = line => {
+		// 	return line.reduce((x, point) => {
+		// 		if (!x) return point;
+		// 		if (Math.abs(point) > Math.abs(x)) return x
+		// 	}, null)
+		// }
+
+
+		const left = this.state.line[0][0] - this.state.left
+		const top = this.state.line[0][1] - this.state.top
+		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
+		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
+
+		if (!this.state.drawSquareMouseUp) return;
+
+		ctx.beginPath();
+		ctx.lineWidth = 5;
+		ctx.moveTo(left, top);
+		ctx.lineTo(right, top);
+		ctx.lineTo(right, bottom);
+		ctx.lineTo(left, bottom);
+		ctx.lineTo(left, top);
+		ctx.stroke();
+
+		this.setState({ drawSquareMouseUp: false })
 	}
 
 	render() {
@@ -89,15 +120,15 @@ class Canvas extends Component {
 			<Container>
 				<canvas
 					id="canvas"
-					onMouseMove={e => this.recordLine(e)}
-					onMouseUp={e => this.handleOnMouseUp(e)}
+					onMouseMove={e => this.getPath(e)}
+					onMouseUp={this.handleOnMouseUp}
 					onMouseDown={e => this.handleOnMouseDown(e)}
 					onMouseLeave={() => this.setState({drawing: false})}
 					ref="canvas"
 					width="800px"
 					height="400px"
 				/>
-			</Container>			
+			</Container>
 		)
 	}
 }
