@@ -14,7 +14,7 @@ const DetailPaneContainer = styled.div`
 `
 
 
-class DetailPain extends Component {
+class DetailPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -25,9 +25,6 @@ class DetailPain extends Component {
 	handleChange = (name, value) => this.setState({[name]: value})
 
 	render() {
-
-		console.log(this.props.selected);
-
 		return (
 			<DetailPaneContainer>
 				{this.props.selected === "drawLine" ? <BrushSize handleChange={this.props.handleChange}/> : null}
@@ -37,4 +34,4 @@ class DetailPain extends Component {
 	}
 }
 
-export default DetailPain;
+export default DetailPane;
