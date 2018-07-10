@@ -57,7 +57,8 @@ class Canvas extends Component {
 	handleOnMouseUp = () => {
 		if (this.state.method === "drawLine") return
 		else if (this.state.method === "drawSquare") {
-			this.setState({ drawSquareMouseUp: true })
+			console.log("End prev")
+			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
 		}
 	}
@@ -70,7 +71,10 @@ class Canvas extends Component {
 
 	handleMethod = () => {
 		if (this.state.method === "drawLine") return this.drawLine();
-		if (this.state.method === "drawSquare") return this.drawSquare();
+		if (this.state.method === "drawSquare") {
+			this.setState({drawPreview: true})			
+			return this.drawSquare()
+		};
 	}
 
 	drawLine = () => {
@@ -85,21 +89,13 @@ class Canvas extends Component {
 		});
 	}
 
-	drawPreview = coords => {
-		// const { left, top, right, bottom } = coords;
-		// const width = left - right;
-		// const height = top - bottom;
+	drawPreview = () => {
 
-		// const style = {
-		// 	position: "fixed",
-		// 	top,
-		// 	left
-		// }
+		console.log({coords: this.state.previewCoords});
 
-		// return <svg width={width} height={height}>
-		// 	<rect width={width} height={height} style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
-		// </svg>
-		console.log("Prew")
+		const { left, top, right, bottom } = this.state.previewCoords;
+		const width = Math.abs(left - right);
+		const height = Math.abs(top - bottom);
 
 		const style = {
 			fill: "rgb(0,0,255)",
@@ -107,12 +103,28 @@ class Canvas extends Component {
 			stroke: "rgb(0,0,0)",
 		}
 
+		const svgStyle = {
+			position: "fixed",
+			top: top - this.state.top,
+			left: left - this.state.left,
+		}
 
-		return (
-			<svg width="400" height="110">
-				<rect width="300" height="100" style={style} />
-			</svg>
-		)
+		return <svg style={svgStyle} width={width} height={height}>
+			<rect width={width} height={height} style={style} />
+		</svg>
+		// console.log("Prew")
+
+		// const style = {
+		// 	fill: "rgb(0,0,255)",
+		// 	strokeWidth: 3,
+		// 	stroke: "rgb(0,0,0)",
+		// }
+
+		// return (
+		// 	<svg width="400" height="110">
+		// 		<rect width="300" height="100" style={style} />
+		// 	</svg>
+		// )
 
 	}
 
@@ -124,7 +136,7 @@ class Canvas extends Component {
 		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
 		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
 
-		this.drawPreview({left, top, right, bottom});
+		this.setState({previewCoords: {left, top, right, bottom}});
 
 		if (!this.state.drawSquareMouseUp) return;
 
@@ -142,10 +154,12 @@ class Canvas extends Component {
 	}
 
 	render() {
+		console.log(this.state.drawPreview);
+
 		return (
 			<Container>
-				{/* { this.state.drawPreview ? this.drawPreview() : null } */}
-				{this.drawPreview()}
+				{ this.state.drawPreview ? this.drawPreview() : null }
+				{/* {this.drawPreview()} */}
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
