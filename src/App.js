@@ -33,20 +33,24 @@ class App extends Component {
 
 		this.state = {
 			color: "",
-			brushSize: 10
+			brushSize: 10,
+			method: "drawLine"
 		}
 	}
 
 	handleChange = (name, value) => this.setState({[name]: value})
 
 	render() {
+
+		console.log(this.state.method);
+
 		return (		
 			<Window>
 				<Header />
 				<Navbar />
 				<AppContainer>
-					<Toolbar handleChange={this.handleChange} getColor={this.handleChange} color={this.state.color} />
-					<Canvas brushSize={this.state.brushSize} color={this.state.color} />
+					<Toolbar getMethod={value => this.handleChange("method", value)} handleChange={this.handleChange} getColor={this.handleChange} color={this.state.color} />
+					<Canvas method={this.state.method} brushSize={this.state.brushSize} color={this.state.color} />
 				</AppContainer>
 				{/* <Footer handleChange={this.handleChange} /> */}
 			</Window>

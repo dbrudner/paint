@@ -30,7 +30,7 @@ class DetailPain extends Component {
 
 		return (
 			<DetailPaneContainer>
-				{this.props.selected === "brushSize" ? <BrushSize handleChange={this.props.handleChange}/> : null}
+				{this.props.selected === "drawLine" ? <BrushSize handleChange={this.props.handleChange}/> : null}
 				{this.props.selected === "eraser" ? <Eraser handleChange={this.props.handleChange}/> : null}				
 			</DetailPaneContainer>
 		)

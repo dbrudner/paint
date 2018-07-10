@@ -28,7 +28,12 @@ class ToolBar extends Component {
 		}
 	}
 
-	handleChange = (name, value) => this.setState({[name]: value})
+	handleChange = (name, value) => {
+		this.setState({[name]: value})
+		if (name === "selected") {
+			this.props.getMethod(value);
+		}
+	}
 
 	render() {
 
@@ -48,14 +53,14 @@ class ToolBar extends Component {
 
 		return (
 			<ToolBarContainer>
-				<Button></Button>
-				<Button></Button>
+				<Button><i class="fas fa-bezier-curve"></i></Button>
+				<Button onClick={() => this.handleChange("selected", "drawSquare")}><i class="fas fa-vector-square"></i></Button>
 				<Button onClick={() => this.handleChange("selected", "eraser")}><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<Button onClick={() => this.handleChange("selected", "brushSize")}><i className="fas fa-paint-brush"></i></Button>
+				<Button onClick={() => this.handleChange("selected", "drawLine")}><i className="fas fa-paint-brush"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
