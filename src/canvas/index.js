@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux'
-import * as types from '../get-paint-method/'
+import * as types from '../redux/get-paint-method'
 
 const Container = styled.div`
 	display: inline-block;
@@ -44,15 +44,18 @@ class Canvas extends Component {
 		const { method } = this.props.state.paintMethod
 
 		this.setState({
-			method,
 			line: [[clientX, clientY]],
 			top, left
 		});
+
+		if (this.props.state.paintMethod === types.drawLine) {
+			this.setState({drawing: true})
+		}
 	}
 
 	handleOnMouseUp = () => {
 
-		const method = this.state.method
+		const method = this.props.state.paintMethod
 
 		this.setState({ method: "" })
 
@@ -68,18 +71,17 @@ class Canvas extends Component {
 	getPath = e => {
 		const { clientX, clientY } = e;
 		this.setState({line: [...this.state.line, [clientX, clientY]]});
-		this.handleMethod();
-	}
+		
 
-	handleMethod = () => {
-		if (this.props.state.paintMethod === types.drawLine) {
+		console.log(this.props.state.paintMethod, this.state.drawing);
+
+		if (this.props.state.paintMethod === types.drawLine && this.state.drawing) {
 			return this.drawLine()
 		};
 	}
 
 	drawLine = () => {
 		if (!this.state.line[0]) return;
-		this.setState({drawing: true})
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
 		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
@@ -89,8 +91,6 @@ class Canvas extends Component {
 			ctx.lineWidth = this.props.brushSize;
 			ctx.stroke();
 		});
-
-		this.setState({ drawing: false})
 	}
 
 	drawPreview = () => {

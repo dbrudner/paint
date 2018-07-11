@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { paintMethod } from './get-paint-method/';
+import { paintMethod } from './redux/get-paint-method';
 
 const rootReducer = combineReducers({
     paintMethod

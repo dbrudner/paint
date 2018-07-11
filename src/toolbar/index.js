@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { changePaintMethod,
 	eraser,
 	drawLine,
-	drawSquare, } from "../get-paint-method/"
+	drawSquare, } from "../redux/get-paint-method"
 
 const ToolBarContainer = styled.div`
 	width: 39px;
