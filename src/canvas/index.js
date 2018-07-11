@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import {connect} from 'react-redux'
+import * as types from '../get-paint-method/'
 
 const Container = styled.div`
 	display: inline-block;
@@ -39,22 +41,25 @@ class Canvas extends Component {
 		const canvas = document.getElementById("canvas");
 		const { top, left } = canvas.getBoundingClientRect();
 		const { clientX, clientY } = e;
-		const { method } = this.props.method
+		const { method } = this.props.state.paintMethod
 
 		this.setState({
 			method,
 			line: [[clientX, clientY]],
 			top, left
 		}, () => {
-			if (method === "drawSquare") {
+			if (method === types.drawSquare) {
 				this.setState({ drawPreview: false })
 			}
 		});
 	}
 
 	handleOnMouseUp = () => {
-		if (this.state.method === "drawLine") return
-		else if (this.state.method === "drawSquare") {
+
+		const method = this.props.state.paintMethod
+
+		if (method === types.drawLine) return
+		else if (method === types.drawSquare) {
 			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
 		}
@@ -67,13 +72,11 @@ class Canvas extends Component {
 	}
 
 	handleMethod = () => {
-		if (this.state.method === "drawLine") return this.drawLine();
-		if (this.state.method === "drawSquare") {
-			return this.drawSquare()
-		};
+		if (this.props.state.paintMethod === types.drawLine) return this.drawLine();
 	}
 
 	drawLine = () => {
+		console.log("DRAWING");
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
 		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
@@ -108,23 +111,10 @@ class Canvas extends Component {
 		return <svg style={svgStyle} width={width} height={height}>
 			<rect width={width} height={height} style={style} />
 		</svg>
-		// console.log("Prew")
-
-		// const style = {
-		// 	fill: "rgb(0,0,255)",
-		// 	strokeWidth: 3,
-		// 	stroke: "rgb(0,0,0)",
-		// }
-
-		// return (
-		// 	<svg width="400" height="110">
-		// 		<rect width="300" height="100" style={style} />
-		// 	</svg>
-		// )
-
 	}
 
 	drawSquare = () => {
+		console.log("DrawSquare");
 		const ctx = this.refs.canvas.getContext('2d');
 
 		const left = this.state.line[0][0] - this.state.left
@@ -150,7 +140,6 @@ class Canvas extends Component {
 	}
 
 	render() {
-
 		return (
 			<Container>
 				{ this.state.drawPreview ? this.drawPreview() : null }
@@ -170,4 +159,10 @@ class Canvas extends Component {
 	}
 }
 
-export default Canvas;
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+export default connect(mapStateToProps)(Canvas)

@@ -3,6 +3,12 @@ import styled from 'styled-components';
 import { Button } from './button';
 import DetailPane from './detail-pane/'
 import ColorPicker from '../footer/color-picker'
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { changePaintMethod,
+	eraser,
+	drawLine,
+	drawSquare, } from "../get-paint-method/"
 
 const ToolBarContainer = styled.div`
 	width: 39px;
@@ -36,31 +42,16 @@ class ToolBar extends Component {
 	}
 
 	render() {
-
-		// const style = {
-		// 	width: "100px",
-		// 	height: "484px",
-		// 	padding: "2px",
-		// 	paddingTop: "25px",
-		// 	backgroundColor: "rgb(191, 191, 191)",
-		// }
-		// return (
-		// 	<div style={style} >
-		// 		<ColorPicker getColor={this.props.handleChange} color={this.state.color} />
-		// 		<BrushSize handleChange={this.props.handleChange} />
-		// 	</div>
-		// )
-
 		return (
 			<ToolBarContainer>
 				<Button><i class="fas fa-bezier-curve"></i></Button>
-				<Button onClick={() => this.handleChange("selected", "drawSquare")}><i class="fas fa-vector-square"></i></Button>
-				<Button onClick={() => this.handleChange("selected", "eraser")}><i className="fas fa-eraser"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(drawSquare)}><i class="fas fa-vector-square"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(eraser)}><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<Button onClick={() => this.handleChange("selected", "drawLine")}><i className="fas fa-paint-brush"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(drawLine)}><i className="fas fa-paint-brush"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
@@ -76,4 +67,14 @@ class ToolBar extends Component {
 	}
 }
 
-export default ToolBar;
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({changePaintMethod}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToolBar)
