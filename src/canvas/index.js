@@ -47,18 +47,18 @@ class Canvas extends Component {
 			method,
 			line: [[clientX, clientY]],
 			top, left
-		}, () => {
-			if (method === types.drawSquare) {
-				this.setState({ drawPreview: false })
-			}
 		});
 	}
 
 	handleOnMouseUp = () => {
 
-		const method = this.props.state.paintMethod
+		const method = this.state.method
 
-		if (method === types.drawLine) return
+		this.setState({ method: "" })
+
+		if (method === types.drawLine) {
+			return this.setState({ drawing: false })
+		}
 		else if (method === types.drawSquare) {
 			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
@@ -72,11 +72,14 @@ class Canvas extends Component {
 	}
 
 	handleMethod = () => {
-		if (this.props.state.paintMethod === types.drawLine) return this.drawLine();
+		if (this.props.state.paintMethod === types.drawLine) {
+			return this.drawLine()
+		};
 	}
 
 	drawLine = () => {
-		console.log("DRAWING");
+		if (!this.state.line[0]) return;
+		this.setState({drawing: true})
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
 		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
@@ -86,12 +89,11 @@ class Canvas extends Component {
 			ctx.lineWidth = this.props.brushSize;
 			ctx.stroke();
 		});
+
+		this.setState({ drawing: false})
 	}
 
 	drawPreview = () => {
-
-		console.log({coords: this.state.previewCoords});
-
 		const { left, top, right, bottom } = this.state.previewCoords;
 		const width = Math.abs(left - right);
 		const height = Math.abs(top - bottom);
@@ -114,7 +116,6 @@ class Canvas extends Component {
 	}
 
 	drawSquare = () => {
-		console.log("DrawSquare");
 		const ctx = this.refs.canvas.getContext('2d');
 
 		const left = this.state.line[0][0] - this.state.left
@@ -143,7 +144,6 @@ class Canvas extends Component {
 		return (
 			<Container>
 				{ this.state.drawPreview ? this.drawPreview() : null }
-				{/* {this.drawPreview()} */}
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
