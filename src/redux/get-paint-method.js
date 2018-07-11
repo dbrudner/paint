@@ -1,14 +1,12 @@
-export const eraser = "ERASER";
-export const drawLine = "DRAW_LINE";
-export const drawSquare = "DRAW_SQUARE";
+import * as types from "./constants";
 
-export function paintMethod(state = drawLine, action) {
+export function paintMethod(state = types.drawLine, action) {
     switch (action.type) {
-        case eraser:
+        case types.eraser:
             return action.payload;
-        case drawLine:
+        case types.drawLine:
 			return action.payload;
-		case drawSquare:
+		case types.drawSquare:
 			return action.payload;
     }
     return state

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {connect} from 'react-redux'
-import * as types from '../redux/get-paint-method'
+import {connect} from 'react-redux';
+import * as types from '../redux/constants';
 
 const Container = styled.div`
 	display: inline-block;
@@ -26,7 +26,6 @@ class Canvas extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			color: "",
 			drawing: false,
 			line: [],
 			lines: [],
@@ -87,7 +86,7 @@ class Canvas extends Component {
 		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
 		this.state.line.forEach(point => {
 			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
-			ctx.strokeStyle = this.props.color;
+			ctx.strokeStyle = this.props.state.color;
 			ctx.lineWidth = this.props.brushSize;
 			ctx.stroke();
 		});
@@ -141,6 +140,8 @@ class Canvas extends Component {
 	}
 
 	render() {
+		console.log(this.props.state);
+
 		return (
 			<Container>
 				{ this.state.drawPreview ? this.drawPreview() : null }

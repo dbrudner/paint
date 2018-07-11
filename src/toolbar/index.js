@@ -5,10 +5,9 @@ import DetailPane from './detail-pane/'
 import ColorPicker from '../footer/color-picker'
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changePaintMethod,
-	eraser,
-	drawLine,
-	drawSquare, } from "../redux/get-paint-method"
+import { changePaintMethod } from "../redux/get-paint-method";
+import { changeColor } from "../redux/get-color";
+import * as types from "../redux/constants";
 
 const ToolBarContainer = styled.div`
 	width: 39px;
@@ -42,16 +41,17 @@ class ToolBar extends Component {
 	}
 
 	render() {
+		console.log(this.props);
 		return (
 			<ToolBarContainer>
-				<Button><i class="fas fa-bezier-curve"></i></Button>
-				<Button onClick={() => this.props.changePaintMethod(drawSquare)}><i class="fas fa-vector-square"></i></Button>
-				<Button onClick={() => this.props.changePaintMethod(eraser)}><i className="fas fa-eraser"></i></Button>
+				<Button><i className="fas fa-bezier-curve"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.drawSquare)}><i className="fas fa-vector-square"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.eraser)}><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<Button onClick={() => this.props.changePaintMethod(drawLine)}><i className="fas fa-paint-brush"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.drawLine)}><i className="fas fa-paint-brush"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
@@ -60,7 +60,7 @@ class ToolBar extends Component {
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<ColorPicker getColor={this.props.handleChange} />
+				<ColorPicker changeColor={this.props.changeColor} />
 				<DetailPane selected={this.state.selected} handleChange={this.props.handleChange}/>
 			</ToolBarContainer>
 		)
@@ -74,7 +74,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({changePaintMethod}, dispatch)
+    return bindActionCreators({
+		changePaintMethod,
+		changeColor
+	}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolBar)
