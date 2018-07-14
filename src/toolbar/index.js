@@ -40,13 +40,18 @@ class ToolBar extends Component {
 		}
 	}
 
+	changeToEraser = () => {
+		this.props.changeColor("white");
+		this.props.changePaintMethod(types.drawLine);
+	}
+
 	render() {
 		console.log(this.props);
 		return (
 			<ToolBarContainer>
 				<Button><i className="fas fa-bezier-curve"></i></Button>
 				<Button onClick={() => this.props.changePaintMethod(types.drawSquare)}><i className="fas fa-vector-square"></i></Button>
-				<Button onClick={() => this.props.changePaintMethod(types.eraser)}><i className="fas fa-eraser"></i></Button>
+				<Button onClick={() => this.changeToEraser()}><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
