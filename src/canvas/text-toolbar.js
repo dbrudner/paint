@@ -7,8 +7,8 @@ const Container = styled.div`
 	height: 44px;
 	background-color: #0000aa;
 	position: absolute;
-	top: ${props => `${props.y + 30}px`};
-	left: ${props => `${props.x + 20}px`};
+	top: ${props => `${props.y}px`};
+	left: ${props => `${props.x}px`};
 	border: 2px solid;
 	border-bottom-color: #535353;
     border-right-color: #535353;
@@ -47,18 +47,22 @@ class TextToolbar extends Component{
 	}
 
 	reposition = e => {
+		console.log("HI");
 		const newX = e.clientX;
 		const newY = e.clientY;
-		const { newX, newY } = this.state;
-
+		const { oldX, oldY } = this.state;
+		this.setState({
+			currentX: oldX - newX,
+			currentY: oldY - newY
+		})
 	}
 
 	render() {
-		const { x, y } = this.props;
+		const { x, y, repositionToolbar, mouseUp } = this.props;
 
 		return (
-			<Container x={x} y={y}>
-				<h2 onMouseUp={e => this.reposition(e)} onMouseDown={e => this.setState({ reposition: true, oldX: e.clientX, oldY: e.clientY })}>Fonts</h2>
+			<Container x={this.state.currentX || x} y={this.state.currentY || y}>
+				<h2 onMouseDown={repositionToolbar}>Fonts</h2>
 				<div>
 					<Select width="60px"></Select>
 					<Select margin="5px" width="30px"></Select>
