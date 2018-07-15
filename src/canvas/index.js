@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
 import * as types from '../redux/constants';
+import TextToolbar from "./text-toolbar"
+
 
 const Container = styled.div`
 	display: inline-block;
@@ -18,6 +20,7 @@ const Container = styled.div`
 
 	canvas {
 		background-color: white;
+		cursor: ${props => props.text ? "text" : null};		
 	}
 `
 
@@ -30,10 +33,11 @@ class Canvas extends Component {
 			line: [],
 			lines: [],
 			drawSquareMouseUp: false,
-			drawPreview: false
+			drawPreview: false,
+			showTextToolbar: true
 		}
 
-		
+
 	}
 
 	componentDidMount() {
@@ -49,8 +53,6 @@ class Canvas extends Component {
 		const { top, left } = this.state.offset;
 		const { clientX, clientY } = e;
 		const method = this.props.state.paintMethod
-
-
 
 		this.setState({
 			line: [[clientX, clientY]],
@@ -109,7 +111,7 @@ class Canvas extends Component {
 
 	drawPreview = () => {
 
-		const { offset } = this.state;		
+		const { offset } = this.state;
 
 		const left = this.state.line[0][0] - this.state.left + offset.left
 		const top = this.state.line[0][1] - this.state.top + offset.top
@@ -152,13 +154,21 @@ class Canvas extends Component {
 		ctx.lineTo(right, bottom);
 		ctx.lineTo(left, bottom);
 		ctx.lineTo(left, top);
-		ctx.stroke(); 
+		ctx.stroke();
+	}
+
+	drawText = () => {
+		this.setState({showTextToolbar: true})
 	}
 
 	render() {
+
+		console.log(this.props.state.paintMethod === types.text)
+
 		return (
-			<Container>
+			<Container text={this.props.state.paintMethod === types.text}>
 				{ this.state.drawPreview ? this.drawPreview() : null }
+				{/* { this.state.showTextToolbar ? <TextToolbar /> : null } */}
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}

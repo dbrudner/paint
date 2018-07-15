@@ -28,8 +28,6 @@ class ToolBar extends Component {
 			color: "",
 			top: "100px",
 			left: "100px",
-			dragBarX: 0,
-			dragBarY: 0,
 			selected: null
 		}
 	}
@@ -65,7 +63,7 @@ class ToolBar extends Component {
 				<Button></Button>
 				<Button onClick={() => this.props.changePaintMethod(types.drawLine)}><i className="fas fa-paint-brush"></i></Button>
 				<Button></Button>
-				<Button></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.text)}><span style={{fontFamily: "times new roman", fontWeight: 700}}>A</span></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>

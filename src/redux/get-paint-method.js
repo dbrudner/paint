@@ -8,6 +8,8 @@ export function paintMethod(state = types.drawLine, action) {
 			return action.payload;
 		case types.drawSquare:
 			return action.payload;
+		case types.text:
+			return action.payload;
     }
     return state
 }
