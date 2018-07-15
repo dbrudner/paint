@@ -11,7 +11,9 @@ class Swatch extends Component {
 		this.state = {  }
 	}
 	render() {
-		return <StyledSwatch flat={this.props.flat} color={this.props.color} />
+		const { color, flat, changeColor } = this.props;
+
+		return <StyledSwatch onClick={() => changeColor(color)} flat={flat} color={color} />
 	}
 }
 
