@@ -1,6 +1,8 @@
 import * as types from "./constants";
 
-export function palette(state = ["black"], action) {
+
+export function palette(state = types.palette, action) {
+    console.log(action.payload);
     switch (action.type) {
         case types.getPalette:
             return action.payload;

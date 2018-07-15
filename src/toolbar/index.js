@@ -48,7 +48,8 @@ class ToolBar extends Component {
 
 	changeColor = color => {
 		this.props.changeColor(color);
-		this.props.changePalette([...this.props.state.palette, color], types.getPalette)
+		console.log([color, ...this.props.state.palette.slice(0, this.props.state.palette.length - 1)])
+		this.props.changePalette([color, ...this.props.state.palette.slice(0, this.props.state.palette.length - 1)], types.getPalette)
 	}
 
 	render() {

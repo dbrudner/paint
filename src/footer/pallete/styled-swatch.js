@@ -8,5 +8,5 @@ export default styled.div`
 	width: 12px;
 	height: 12px;
 	background-color: ${props => props.color};
-	margin: ${props => props.flat ? null : "2px"}
+	margin: ${props => props.flat ? null : "1px"}
 `

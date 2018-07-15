@@ -11,7 +11,13 @@ const style = {
 const swatchesStyle = {
 	borderBottom: "1px solid #888888",
 	borderRight: "1px solid #888888",
-	width: "180px"	
+	width: "172px",
+	display: "flex",
+	justifyContent: "left:",
+	flexWrap: "wrap",
+	paddingLeft: "2px",
+	paddingBottom: "2px",
+	backgroundColor: "rgb(228, 220, 220)"
 }
 
 const Palette = props => {

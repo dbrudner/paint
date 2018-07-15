@@ -5,7 +5,6 @@ import { changeColor } from "../../redux/get-color";
 import * as types from "../../redux/constants"
 import StyledSwatch from "./styled-swatch";
 
-
 class Swatch extends Component {
 	constructor(props) {
 		super(props);

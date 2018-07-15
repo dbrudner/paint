@@ -8,8 +8,8 @@ const ActiveSwatchContainer = styled.div`
 	border-right: 1px solid white;
 	border-bottom: 1px solid white;
 	border-left: 1px solid gray;
-	height: 28px;
-	width: 28px;
+	height: 30px;
+	width: 30px;
 	position: relative;
 `
 
@@ -24,8 +24,8 @@ const ActiveSwatch = props => {
 
 	const passiveSwatchStyle = {
 		position: "absolute",
-		left: 10,
-		top: 10,
+		left: 11,
+		top: 11,
 		zIndex: 1
 	}
 
