@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { changePaintMethod } from "../redux/get-paint-method";
 import { changeColor } from "../redux/get-color";
+import { changePalette } from "../redux/get-palette";
 import * as types from "../redux/constants";
 
 const ToolBarContainer = styled.div`
@@ -45,6 +46,11 @@ class ToolBar extends Component {
 		this.props.changePaintMethod(types.drawLine);
 	}
 
+	changeColor = color => {
+		this.props.changeColor(color);
+		this.props.changePalette([...this.props.state.palette, color], types.getPalette)
+	}
+
 	render() {
 		console.log(this.props);
 		return (
@@ -65,7 +71,7 @@ class ToolBar extends Component {
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<ColorPicker changeColor={this.props.changeColor} />
+				<ColorPicker changeColor={this.changeColor} />
 				<DetailPane selected={this.state.selected} handleChange={this.props.handleChange}/>
 			</ToolBarContainer>
 		)
@@ -81,7 +87,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
 		changePaintMethod,
-		changeColor
+		changeColor,
+		changePalette
 	}, dispatch)
 }
 

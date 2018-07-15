@@ -51,14 +51,12 @@ class Canvas extends Component {
 		const method = this.props.state.paintMethod
 
 
-		console.log(this.props.state, types.drawSquare);
 
 		this.setState({
 			line: [[clientX, clientY]],
 			top, left
 		});
 
-		console.log(method, types.drawSquare);
 
 		if (method === types.drawLine) {
 			return this.setState({drawing: true})
@@ -118,8 +116,6 @@ class Canvas extends Component {
 		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
 		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
 
-		console.log(left, top);
-
 		const width = Math.abs(left - right);
 		const height = Math.abs(top - bottom);
 
@@ -142,14 +138,10 @@ class Canvas extends Component {
 	}
 
 	drawSquare = () => {
-
 		const left = this.state.line[0][0] - this.state.left
 		const top = this.state.line[0][1] - this.state.top
 		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
 		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
-		console.log(left, top);
-
-		console.log("draw square");
 		const ctx = this.refs.canvas.getContext('2d');
 
 		ctx.beginPath();
@@ -160,12 +152,10 @@ class Canvas extends Component {
 		ctx.lineTo(right, bottom);
 		ctx.lineTo(left, bottom);
 		ctx.lineTo(left, top);
-		ctx.stroke();
-
+		ctx.stroke(); 
 	}
 
 	render() {
-
 		return (
 			<Container>
 				{ this.state.drawPreview ? this.drawPreview() : null }

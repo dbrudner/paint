@@ -26,14 +26,12 @@ const BrushSizeDot = props => {
 
 	const getTranslate = size => {
 		if (size == 3) {
-			console.log(size);
 			return `translateY(-6px)`
 		}
 		if (parseInt(size) > 2) return `translateY(-${(size - 10) * -1}px)`
 		return `translateY(-${(size - 8) * -1}px)`
 	}
 
-	// console.log(size, getTranslate(size));
 
 	const svg = {
 		transform: getTranslate(size)

@@ -1,17 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import ColorPicker from './color-picker';
-import CurrentColor from './current-color';
+import Palette from "./pallete";
 
 const FooterContainer = styled.div`
-	padding: 10px;
+	padding: 5px;
 `
 
 const Footer = props => {
 	return (
 		<FooterContainer>
-			<CurrentColor color={props.color} />
-			<ColorPicker getColor={props.handleChange} />
+			<Palette />
 		</FooterContainer>
 	)
 }

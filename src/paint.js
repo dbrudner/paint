@@ -48,7 +48,7 @@ class Paint extends Component {
 					<Toolbar getMethod={value => this.handleChange("method", value)} handleChange={this.handleChange} getColor={this.handleChange} color={this.state.color} />
 					<Canvas method={this.state.method} brushSize={this.state.brushSize} color={this.state.color} />
 				</PaintContainer>
-				{/* <Footer handleChange={this.handleChange} /> */}
+				<Footer />
 			</Window>
 		);
 	}

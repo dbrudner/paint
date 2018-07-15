@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import BrushSizeDot from './brush-size-dot'
-
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { changeBrushSize } from "../../../redux/get-brush-size";
+import * as types from "../../../redux/constants"
 const brushes = {
 	display: "flex",
 	flexWrap: "wrap",
@@ -20,7 +23,7 @@ const BrushesWindow = props => {
 	</div>
 }
 
-export default class BrushSize extends Component {
+class BrushSize extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {open: false}
@@ -36,3 +39,17 @@ export default class BrushSize extends Component {
 		)
 	}
 }
+
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+		changeBrushSize
+	}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BrushSize)
