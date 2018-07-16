@@ -61,15 +61,15 @@ class Canvas extends Component {
 
 
 		if (method === types.drawLine) {
-			return this.setState({drawing: true})
+			return this.setState({drawing: true, showTextToolbar: false, textToolbarMounted: false})
 		}
 
 		if (method === types.drawSquare) {
-			return this.setState({drawPreview: true})
+			return this.setState({drawPreview: true, showTextToolbar: false, textToolbarMounted: false})
 		}
 
 		if (method === types.eraser) {
-			return this.setState({drawing: true})
+			return this.setState({drawing: true, showTextToolbar: false, textToolbarMounted: false})
 		}
 
 		if (method === types.text && !this.state.textToolbarMounted) {
@@ -89,11 +89,6 @@ class Canvas extends Component {
 			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
 		}
-
-		if (this.state.repositionTextToolbar) {
-			console.log("HEY");
-			this.setState({repositionTextToolbar: false})
-		}
 	}
 
 	getPath = e => {
@@ -103,10 +98,6 @@ class Canvas extends Component {
 		if (this.props.state.paintMethod === types.drawLine && this.state.drawing) {
 			return this.drawLine()
 		};
-
-		if (this.state.repositionTextToolbar) {
-			this.repositionTextToolbar(e);
-		}
 	}
 
 	drawLine = () => {
@@ -174,16 +165,6 @@ class Canvas extends Component {
 		this.setState({showTextToolbar: true})
 	}
 
-	repositionTextToolbar = e => {
-		if (!this.state.repositionTextToolbar) return
-		const { clientX, clientY } = e;
-		
-		this.setState({
-			x: clientX,
-			y: clientY
-		})
-	}
-
 	render() {
 
 		const { showTextToolbar, x, y } = this.state
@@ -191,7 +172,7 @@ class Canvas extends Component {
 		return (
 			<Container text={ this.props.state.paintMethod === types.text }>
 				{ this.state.drawPreview ? this.drawPreview() : null }
-				{ this.state.showTextToolbar  ? <TextToolbar repositionToolbar={() => this.setState({ repositionTextToolbar: !this.state.repositionTextToolbar })} x={x} y={y} /> : null }
+				{ this.state.showTextToolbar  ? <TextToolbar x={x} y={y} /> : null }
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
