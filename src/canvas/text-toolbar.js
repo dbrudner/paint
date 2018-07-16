@@ -46,23 +46,30 @@ class TextToolbar extends Component{
 		}
 	}
 
-	reposition = e => {
-		console.log("HI");
-		const newX = e.clientX;
-		const newY = e.clientY;
-		const { oldX, oldY } = this.state;
-		this.setState({
-			currentX: oldX - newX,
-			currentY: oldY - newY
-		})
-	}
-
 	render() {
 		const { x, y, repositionToolbar, mouseUp } = this.props;
 
+		const reposition = e => {
+			const { clientX, clientY } = e;
+			const { offsetX, offsetY } = this.state;
+			
+			this.setState({ currentX: clientX - offsetX, currentY: clientY - offsetY })
+		}
+
+		const getOffset = e => {
+
+			const el = document.getElementById("textbar")
+
+			const { top, left, bottom, right } = el.getBoundingClientRect();
+
+			const { clientX, clientY } = e;
+			
+			this.setState({ offsetX: clientX - left, offsetY: clientY - top})
+		}
+
 		return (
-			<Container x={this.state.currentX || x} y={this.state.currentY || y}>
-				<h2 onMouseDown={repositionToolbar}>Fonts</h2>
+			<Container id="textbar" draggable="true" onDragStart={getOffset} onDragEnd={reposition} x={this.state.currentX || x} y={this.state.currentY || y}>
+				<h2>Fonts</h2>
 				<div>
 					<Select width="60px"></Select>
 					<Select margin="5px" width="30px"></Select>

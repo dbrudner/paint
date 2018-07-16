@@ -91,6 +91,7 @@ class Canvas extends Component {
 		}
 
 		if (this.state.repositionTextToolbar) {
+			console.log("HEY");
 			this.setState({repositionTextToolbar: false})
 		}
 	}
@@ -190,7 +191,7 @@ class Canvas extends Component {
 		return (
 			<Container text={ this.props.state.paintMethod === types.text }>
 				{ this.state.drawPreview ? this.drawPreview() : null }
-				{ this.state.showTextToolbar  ? <TextToolbar repositionToolbar={() => this.setState({ repositionTextToolbar: true })} x={x} y={y} /> : null }
+				{ this.state.showTextToolbar  ? <TextToolbar repositionToolbar={() => this.setState({ repositionTextToolbar: !this.state.repositionTextToolbar })} x={x} y={y} /> : null }
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
