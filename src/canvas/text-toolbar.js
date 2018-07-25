@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
 import { Button } from "../toolbar/button"
+import { changeTextStyle, fontSizes } from "../redux/constants"
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { changeFontStyle } from "../redux/get-text-style";
 
 const Container = styled.div`
-	width: 158px;
+	width: 200px;
 	height: 44px;
 	background-color: #0000aa;
 	position: absolute;
@@ -31,11 +35,19 @@ const Container = styled.div`
 `
 
 const Select = styled.select`
-	font-size: 6px;
+	font-size: 8px;
 	width: ${props => props.width};
 	height: 15px;
 	margin-left: ${props => props.margin || "2px"};
-	margin-right: ${props => props.margin ? "5px" : ""};	
+	margin-right: ${props => props.margin ? "5px" : ""};
+`
+
+const Datalist = styled.select`
+	font-size: 8px;
+	width: ${props => props.width};
+	height: 15px;
+	margin-left: ${props => props.margin || "2px"};
+	margin-right: ${props => props.margin ? "5px" : ""};
 `
 
 class TextToolbar extends Component{
@@ -46,13 +58,27 @@ class TextToolbar extends Component{
 		}
 	}
 
+	renderDataList = () => {
+		return fontSizes.map(size => <option key={size} value={size}>{size}</option>)
+	}
+
+	changeFontStyle = style => {
+		const currentStyle = this.props.state.textStyle;
+		const newStyle = {...currentStyle, [style]: !currentStyle[style]}
+		this.props.changeFontStyle(newStyle);
+		
+	}
+
 	render() {
+		
+		console.log(this.props);
+
 		const { x, y, repositionToolbar, mouseUp } = this.props;
 
 		const reposition = e => {
 			const { clientX, clientY } = e;
 			const { offsetX, offsetY } = this.state;
-			
+
 			this.setState({ currentX: clientX - offsetX, currentY: clientY - offsetY })
 		}
 
@@ -63,7 +89,7 @@ class TextToolbar extends Component{
 			const { top, left, bottom, right } = el.getBoundingClientRect();
 
 			const { clientX, clientY } = e;
-			
+
 			this.setState({ offsetX: clientX - left, offsetY: clientY - top})
 		}
 
@@ -71,16 +97,32 @@ class TextToolbar extends Component{
 			<Container id="textbar" draggable="true" onDragStart={getOffset} onDragEnd={reposition} x={this.state.currentX || x} y={this.state.currentY || y}>
 				<h2>Fonts</h2>
 				<div>
-					<Select width="60px"></Select>
-					<Select margin="5px" width="30px"></Select>
-					<Button></Button>
-					<Button></Button>
-					<Button></Button>
+					<Select width="90px">
+						<option value="5" >Times New Roman</option>
+					</Select>
+					<Datalist margin="5px" width="34px">
+						{this.renderDataList()}
+					</Datalist>
+					<Button onClick={() => this.changeFontStyle("bold")} active fontSize="8"><strong>B</strong></Button>
+					<Button onClick={() => this.changeFontStyle("italic")} fontSize="8"><em>I</em></Button>
+					<Button onClick={() => this.changeFontStyle("underline")} fontSize="8"><span style={{textDecoration: "underline"}}>u</span></Button>
 				</div>
 			</Container>
 		)
 	}
-	
+
 }
 
-export default TextToolbar;
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+		changeFontStyle
+	}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextToolbar)

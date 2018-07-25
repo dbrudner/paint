@@ -122,8 +122,13 @@ class Canvas extends Component {
 		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
 		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
 
+		console.log(left, top, right, bottom);
+
 		const width = Math.abs(left - right);
 		const height = Math.abs(top - bottom);
+
+		console.log(width)
+		console.log(height);
 
 		const style = {
 			fill: "rgb(0,0,255)",
@@ -133,13 +138,14 @@ class Canvas extends Component {
 
 		const svgStyle = {
 			position: "fixed",
-			top: top - this.state.top,
-			left: left - this.state.left,
-			opacity: .3
+			opacity: .3,
+			backgroundColor: "green"
 		}
 
-		return <svg style={svgStyle} width={width} height={height}>
-			<rect width={width} height={height} style={style} />
+		const path = `M${top} ${left} l${top} ${right} l${bottom} ${right} l${bottom} ${left} l${top} ${left}`
+		console.log("HI")
+		return <svg style={svgStyle}>
+			<path style={style} d={path} fill="purple"/>
 		</svg>
 	}
 
