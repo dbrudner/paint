@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
 import * as types from '../redux/constants';
-import TextToolbar from "./text-toolbar"
-
+import TextToolbar from "./text-toolbar";
+import TextPreview from "./text-preview";
 
 const Container = styled.div`
+	position: relative;
 	display: inline-block;
 	background-color: #6f6f6f;
 	padding: 20px 200px 200px 20px;
@@ -36,7 +37,8 @@ class Canvas extends Component {
 			drawPreview: false,
 			showTextToolbar: false,
 			repositionTextToolbar: false,
-			textToolbarMounted: false
+			textToolbarMounted: false,
+			text: false
 		}
 	}
 
@@ -54,26 +56,33 @@ class Canvas extends Component {
 		const { clientX, clientY } = e;
 		const method = this.props.state.paintMethod
 
+		console.log(method);
+
 		this.setState({
 			line: [[clientX, clientY]],
 			top, left
 		});
 
+		if (method === types.text && !this.state.textToolbarMounted) {
+			return this.setState({ text: true, showTextToolbar: true, x: clientX, y: clientY, textToolbarMounted: true })
+		}
+
+		this.setState({ showTextToolbar: false, textToolbarMounted: false })
 
 		if (method === types.drawLine) {
-			return this.setState({drawing: true, showTextToolbar: false, textToolbarMounted: false})
+			return this.setState({ drawing: true })
 		}
 
 		if (method === types.drawSquare) {
-			return this.setState({drawPreview: true, showTextToolbar: false, textToolbarMounted: false})
+			return this.setState({ drawPreview: true })
 		}
 
 		if (method === types.eraser) {
-			return this.setState({drawing: true, showTextToolbar: false, textToolbarMounted: false})
+			return this.setState({ drawing: true })
 		}
 
-		if (method === types.text && !this.state.textToolbarMounted) {
-			return this.setState({showTextToolbar: true, x: clientX, y: clientY, textToolbarMounted: true })
+		if (method === types.sprayPaintSelected) {
+			return this.setState({ sprayPaint: true })
 		}
 	}
 
@@ -85,6 +94,11 @@ class Canvas extends Component {
 		if (method === types.drawLine) {
 			return this.setState({ drawing: false })
 		}
+
+		if (method === types.sprayPaintSelected) {
+			return this.setState({ sprayPaint: false })
+		}
+
 		if (method === types.drawSquare) {
 			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
@@ -98,6 +112,28 @@ class Canvas extends Component {
 		if (this.props.state.paintMethod === types.drawLine && this.state.drawing) {
 			return this.drawLine()
 		};
+
+		if (this.props.state.paintMethod === types.sprayPaintSelected && this.state.sprayPaint) {
+			return this.spray();
+		}
+	}
+
+	spray = () => {
+		const ctx = this.refs.canvas.getContext('2d');
+
+		if (!this.state.line[0]) return;
+
+		const x = this.state.line[this.state.line.length - 1][0] - this.state.left
+		const y = this.state.line[this.state.line.length - 1][1] - this.state.top
+
+		for (let i = 0; i<20; i++) {
+			const randomX = x + (Math.random() * 50) - 25
+			const randomY = y + (Math.random() * 50) - 25
+
+
+			ctx.fillRect(randomX, randomY, 3, 3);
+			ctx.fillStyle = this.props.state.color;
+		}
 	}
 
 	drawLine = () => {
@@ -172,7 +208,6 @@ class Canvas extends Component {
 	}
 
 	render() {
-
 		const { showTextToolbar, x, y } = this.state
 
 		return (
@@ -189,6 +224,7 @@ class Canvas extends Component {
 					width="800px"
 					height="400px"
 				/>
+				{this.state.text ? <TextPreview color={this.props.state.color} textStyle={this.props.state.textStyle} left={20} top={100} /> : null}
 			</Container>
 		)
 	}

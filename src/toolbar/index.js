@@ -62,7 +62,7 @@ class ToolBar extends Component {
 				<Button></Button>
 				<Button></Button>
 				<Button onClick={() => this.props.changePaintMethod(types.drawLine)}><i className="fas fa-paint-brush"></i></Button>
-				<Button></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.sprayPaintSelected)}><i className="fas fa-spray-can"></i></Button>
 				<Button onClick={() => this.props.changePaintMethod(types.text)}><span style={{fontFamily: "times new roman", fontWeight: 700}}>A</span></Button>
 				<Button></Button>
 				<Button></Button>

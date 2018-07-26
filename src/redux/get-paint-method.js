@@ -10,6 +10,8 @@ export function paintMethod(state = types.drawLine, action) {
 			return action.payload;
 		case types.text:
 			return action.payload;
+		case types.sprayPaintSelected:
+			return action.payload;
     }
     return state
 }
