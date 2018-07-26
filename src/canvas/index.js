@@ -130,7 +130,6 @@ class Canvas extends Component {
 			const randomX = x + (Math.random() * 50) - 25
 			const randomY = y + (Math.random() * 50) - 25
 
-
 			ctx.fillRect(randomX, randomY, 3, 3);
 			ctx.fillStyle = this.props.state.color;
 		}
@@ -209,6 +208,8 @@ class Canvas extends Component {
 
 	render() {
 		const { showTextToolbar, x, y } = this.state
+
+		console.log(x, y);
 
 		return (
 			<Container text={ this.props.state.paintMethod === types.text }>

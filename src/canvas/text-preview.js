@@ -35,9 +35,6 @@ class TextPreview extends Component {
 	// }
 
 	render() {
-
-		console.log(this.props);
-
 		return <Input {...this.props} ref="input" value={this.state.value} onChange={e => this.setState({ value: e.target.value })} />
 	}
 }
