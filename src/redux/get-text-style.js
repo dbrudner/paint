@@ -21,7 +21,6 @@ export function textStyle(state = textStyleState, action) {
 }
 
 export function changeFontStyle(fontStyle) {
-	console.log(fontStyle);
 	return {
 		type: types.changeTextStyle,
 		payload: fontStyle

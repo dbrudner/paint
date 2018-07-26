@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
-import { Button } from "../toolbar/button"
+import { Button2 } from "../toolbar/button"
 import { changeTextStyle, fontSizes } from "../redux/constants"
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -82,7 +82,9 @@ class TextToolbar extends Component{
 
 	render() {
 
-		console.log(this.props);
+		const { bold, italic, underline } = this.props.state.textStyle;
+
+		console.log({ bold, italic, underline })
 
 		const { x, y, repositionToolbar, mouseUp } = this.props;
 
@@ -94,13 +96,9 @@ class TextToolbar extends Component{
 		}
 
 		const getOffset = e => {
-
 			const el = document.getElementById("textbar")
-
 			const { top, left, bottom, right } = el.getBoundingClientRect();
-
 			const { clientX, clientY } = e;
-
 			this.setState({ offsetX: clientX - left, offsetY: clientY - top})
 		}
 
@@ -115,9 +113,9 @@ class TextToolbar extends Component{
 					<Datalist onChange={e => this.changeFontSize(e.target.value)} margin="5px" width="34px">
 						{this.renderDataList()}
 					</Datalist>
-					<Button onClick={() => this.changeFontStyle("bold")} active fontSize="8"><strong>B</strong></Button>
-					<Button onClick={() => this.changeFontStyle("italic")} fontSize="8"><em>I</em></Button>
-					<Button onClick={() => this.changeFontStyle("underline")} fontSize="8"><span style={{textDecoration: "underline"}}>u</span></Button>
+					<Button2 active={bold} onClick={() => this.changeFontStyle("bold")} fontSize="8"><strong>B</strong></Button2>
+					<Button2 active={italic} onClick={() => this.changeFontStyle("italic")} fontSize="8"><em>I</em></Button2>
+					<Button2 active={underline} onClick={() => this.changeFontStyle("underline")} fontSize="8"><span style={{textDecoration: "underline"}}>u</span></Button2>
 				</div>
 			</Container>
 		)
