@@ -11,7 +11,7 @@ export const Button = styled.button`
 	border-right: 1px solid gray;
 	border-bottom: 1px solid gray;
 	display: block;
-	font-size: ${props => `${props.fontSize}px`};
+	font-size: ${props => props.fontSize ? `${props.fontSize}px` : ""};
 	font-family: "times new roman";
 	border: ${props => props.active ? "none" : ""};
 	border-top: ${props => props.active ? "1px solid gray" : ""};
