@@ -66,11 +66,22 @@ class TextToolbar extends Component{
 		const currentStyle = this.props.state.textStyle;
 		const newStyle = {...currentStyle, [style]: !currentStyle[style]}
 		this.props.changeFontStyle(newStyle);
-		
+	}
+
+	changeFont = font => {
+		const currentStyle = this.props.state.textStyle;
+		const newStyle = {...currentStyle, font}
+		this.props.changeFontStyle(newStyle);
+	}
+
+	changeFontSize = fontSize => {
+		const currentStyle = this.props.state.textStyle;
+		const newStyle = {...currentStyle, fontSize}
+		this.props.changeFontStyle(newStyle);
 	}
 
 	render() {
-		
+
 		console.log(this.props);
 
 		const { x, y, repositionToolbar, mouseUp } = this.props;
@@ -97,10 +108,11 @@ class TextToolbar extends Component{
 			<Container id="textbar" draggable="true" onDragStart={getOffset} onDragEnd={reposition} x={this.state.currentX || x} y={this.state.currentY || y}>
 				<h2>Fonts</h2>
 				<div>
-					<Select width="90px">
-						<option value="5" >Times New Roman</option>
+					<Select onChange={e => this.changeFont(e.target.value)} width="90px">
+						<option value="Times New Roman">Times New Roman</option>
+						<option value="Arial">Arial</option>
 					</Select>
-					<Datalist margin="5px" width="34px">
+					<Datalist onChange={e => this.changeFontSize(e.target.value)} margin="5px" width="34px">
 						{this.renderDataList()}
 					</Datalist>
 					<Button onClick={() => this.changeFontStyle("bold")} active fontSize="8"><strong>B</strong></Button>
