@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { doChangeFont,
 	doChangeFontSize,
 	doChangeFontStyle } from "../redux/text-style";
+import DragDrop from "../hocs/drag-drop";
 
 const Container = styled.div`
 	width: 200px;
@@ -56,7 +57,7 @@ class TextToolbar extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			repositioning: false
+			repositioning: false,
 		}
 	}
 
@@ -83,11 +84,7 @@ class TextToolbar extends Component{
 	}
 
 	render() {
-
 		const { bold, italic, underline } = this.props.state.textStyle;
-
-		console.log({ bold, italic, underline })
-
 		const { x, y, repositionToolbar, mouseUp } = this.props;
 
 		const reposition = e => {
@@ -105,7 +102,7 @@ class TextToolbar extends Component{
 		}
 
 		return (
-			<Container id="textbar" draggable="true" onDragStart={getOffset} onDragEnd={reposition} x={this.state.currentX || x} y={this.state.currentY || y}>
+			<Container>
 				<h2>Fonts</h2>
 				<div>
 					<Select onChange={e => this.props.changeFont(e.target.value)} width="90px">
@@ -139,4 +136,4 @@ const mapDispatchToProps = dispatch => {
 	}, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextToolbar)
+export default DragDrop(connect(mapStateToProps, mapDispatchToProps)(TextToolbar))

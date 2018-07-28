@@ -1,6 +1,6 @@
 import * as types from "./constants";
 
-export const paintMethodReducer = (state = "DRAW_LINE", action) => {
+export const paintMethodReducer = (state = types.DRAW_LINE, action) => {
 	switch (action.type) {
 		case types.METHOD_SELECTED:
 			return action.payload;

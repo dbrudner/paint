@@ -9,9 +9,7 @@ const textStyleState = {
 }
 
 export function textStyleReducer(state = textStyleState, action) {
-
 	const { payload } = action
-	
 
 	switch (action.type) {
 		case types.FONT_CHANGED:
@@ -19,7 +17,7 @@ export function textStyleReducer(state = textStyleState, action) {
 		case types.FONT_SIZE_CHANGED:
 			return {...state, fontSize: payload}
 		case types.FONT_STYLE_CHANGED:
-			return {...state, [payload]: !state[payload]}		
+			return {...state, [payload]: !state[payload]}
 	}
 	return state
 }

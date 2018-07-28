@@ -12,11 +12,11 @@ const Container = styled.div`
 	padding: 20px 200px 200px 20px;
 	width: 100%;
 	border: 2px solid;
-    border-bottom-color: #c7c7c7;
-    border-right-color: #c7c7c7;
-    border-left-color: #808080;
-    border-top-color: #808080;
-    background-color: #7b7b7b;
+	border-bottom-color: #c7c7c7;
+	border-right-color: #c7c7c7;
+	border-left-color: #808080;
+	border-top-color: #808080;
+	background-color: #7b7b7b;
 	padding: 10px;
 
 	canvas {
@@ -32,11 +32,9 @@ class Canvas extends Component {
 		this.state = {
 			drawing: false,
 			line: [],
-			lines: [],
 			drawSquareMouseUp: false,
 			drawPreview: false,
 			showTextToolbar: false,
-			repositionTextToolbar: false,
 			textToolbarMounted: false,
 			text: false
 		}
@@ -158,9 +156,6 @@ class Canvas extends Component {
 		const width = Math.abs(left - right);
 		const height = Math.abs(top - bottom);
 
-		console.log(width)
-		console.log(height);
-
 		const style = {
 			fill: "rgb(0,0,255)",
 			strokeWidth: 3,
@@ -174,7 +169,7 @@ class Canvas extends Component {
 		}
 
 		const path = `M${top} ${left} l${top} ${right} l${bottom} ${right} l${bottom} ${left} l${top} ${left}`
-		console.log("HI")
+
 		return <svg style={svgStyle}>
 			<path style={style} d={path} fill="purple"/>
 		</svg>
@@ -205,8 +200,6 @@ class Canvas extends Component {
 	render() {
 		const { showTextToolbar, x, y } = this.state
 
-		console.log(x, y);
-
 		return (
 			<Container text={ this.props.state.paintMethod === types.TEXT }>
 				{ this.state.drawPreview ? this.drawPreview() : null }
@@ -227,10 +220,10 @@ class Canvas extends Component {
 	}
 }
 
-function mapStateToProps(state) {
-    return {
-        state
-    }
+const mapStateToProps = state => {
+	return {
+		state
+	}
 }
 
 export default connect(mapStateToProps)(Canvas)
