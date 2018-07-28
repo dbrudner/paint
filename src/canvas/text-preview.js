@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from "styled-components"
 import ReactDOM from 'react-dom';
+import DragDrop from "../hocs/drag-drop";
 
 const Input = styled.textarea`
 	position: absolute;
@@ -39,4 +40,4 @@ class TextPreview extends Component {
 	}
 }
 
-export default TextPreview;
+export default DragDrop(TextPreview);

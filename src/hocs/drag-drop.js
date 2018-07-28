@@ -7,36 +7,40 @@ const Container = styled.div`
 	left: ${props => `${props.x}px`};
 `
 
-export default function DragAndDrop(WrappedComponent) {
+export default function DragAndDrop(WrappedComponent, offsetX, offsetY) {
 	return class extends Component {
 
 		constructor(props) {
 			super(props);
 
 			this.state = {
-				repositioning: false,
 			}
 		}
 
 		reposition = e => {
 			const { clientX, clientY } = e;
 			const { offsetX, offsetY } = this.state;
-
+			console.log(clientX - offsetX, clientY - offsetY)
 			this.setState({ currentX: clientX - offsetX, currentY: clientY - offsetY })
 		}
 
 		getOffset = e => {
 			const el = document.getElementById("dragEl")
 			const { top, left, bottom, right } = el.getBoundingClientRect();
+			console.log({ top, left, bottom, right })
 			const { clientX, clientY } = e;
 			this.setState({ offsetX: clientX - left, offsetY: clientY - top})
 		}
 
 		render() {
 			const { x, y } = this.props;
+			const { offsetX, offsetY } = this.state;
+			
+			console.log(this.props)
+
 			return (
-				<Container id="dragEl" draggable="true" onDragStart={this.getOffset} onDragEnd={this.reposition} x={this.state.currentX - 100 || x - 100} y={this.state.currentY - 20 || y - 20}>
-					<WrappedComponent />
+				<Container id="dragEl" draggable="true" onDragStart={this.getOffset} onDragEnd={this.reposition} x={ this.state.currentX - this.props.offsetX || x - this.props.offsetX } y={ this.state.currentY - this.props.offsetY || y - this.props.offsetY }>
+					<WrappedComponent {...this.props} />
 				</Container>
 			)
 			

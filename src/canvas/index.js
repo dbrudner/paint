@@ -202,8 +202,9 @@ class Canvas extends Component {
 
 		return (
 			<Container text={ this.props.state.paintMethod === types.TEXT }>
-				{ this.state.drawPreview ? this.drawPreview() : null }
-				{ this.state.showTextToolbar  ? <TextToolbar x={x} y={y} /> : null }
+				{ this.state.drawPreview && this.drawPreview() }
+				{ this.state.showTextToolbar && <TextToolbar offsetX={100} offsetY={100} x={x} y={y} /> }
+				{this.state.text && <TextPreview color={this.props.state.color} textStyle={this.props.state.textStyle} /> }				
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
@@ -214,7 +215,6 @@ class Canvas extends Component {
 					width="800px"
 					height="400px"
 				/>
-				{this.state.text ? <TextPreview color={this.props.state.color} textStyle={this.props.state.textStyle} left={20} top={100} /> : null}
 			</Container>
 		)
 	}
