@@ -4,7 +4,9 @@ import { Button2 } from "../toolbar/button"
 import { changeTextStyle, fontSizes } from "../redux/constants"
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changeFontStyle } from "../redux/get-text-style";
+import { doChangeFont,
+	doChangeFontSize,
+	doChangeFontStyle } from "../redux/text-style";
 
 const Container = styled.div`
 	width: 200px;
@@ -15,9 +17,9 @@ const Container = styled.div`
 	left: ${props => `${props.x}px`};
 	border: 2px solid;
 	border-bottom-color: #535353;
-    border-right-color: #535353;
-    border-left-color: #dbdbdb;
-    border-top-color: #dbdbdb;
+	border-right-color: #535353;
+	border-left-color: #dbdbdb;
+	border-top-color: #dbdbdb;
 
 	h2 {
 		margin: 3px 0 3px 5px;
@@ -106,16 +108,16 @@ class TextToolbar extends Component{
 			<Container id="textbar" draggable="true" onDragStart={getOffset} onDragEnd={reposition} x={this.state.currentX || x} y={this.state.currentY || y}>
 				<h2>Fonts</h2>
 				<div>
-					<Select onChange={e => this.changeFont(e.target.value)} width="90px">
+					<Select onChange={e => this.props.changeFont(e.target.value)} width="90px">
 						<option value="Times New Roman">Times New Roman</option>
 						<option value="Arial">Arial</option>
 					</Select>
-					<Datalist onChange={e => this.changeFontSize(e.target.value)} margin="5px" width="34px">
+					<Datalist onChange={e => this.props.changeFontSize(e.target.value)} margin="5px" width="34px">
 						{this.renderDataList()}
 					</Datalist>
-					<Button2 active={bold} onClick={() => this.changeFontStyle("bold")} fontSize="8"><strong>B</strong></Button2>
-					<Button2 active={italic} onClick={() => this.changeFontStyle("italic")} fontSize="8"><em>I</em></Button2>
-					<Button2 active={underline} onClick={() => this.changeFontStyle("underline")} fontSize="8"><span style={{textDecoration: "underline"}}>u</span></Button2>
+					<Button2 active={bold} onClick={() => this.props.changeFontStyle("bold")} fontSize="8"><strong>B</strong></Button2>
+					<Button2 active={italic} onClick={() => this.props.changeFontStyle("italic")} fontSize="8"><em>I</em></Button2>
+					<Button2 active={underline} onClick={() => this.props.changeFontStyle("underline")} fontSize="8"><span style={{textDecoration: "underline"}}>u</span></Button2>
 				</div>
 			</Container>
 		)
@@ -123,15 +125,17 @@ class TextToolbar extends Component{
 
 }
 
-function mapStateToProps(state) {
-    return {
-        state
-    }
+const mapStateToProps = state => {
+	return {
+		state
+	}
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-		changeFontStyle
+const mapDispatchToProps = dispatch => {
+	return bindActionCreators({
+		changeFont: doChangeFont,
+		changeFontSize: doChangeFontSize,
+		changeFontStyle: doChangeFontStyle
 	}, dispatch)
 }
 

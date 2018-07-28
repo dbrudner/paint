@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changeColor } from "../../redux/get-color";
+import { doChangeColor } from "../../redux/color";
 import * as types from "../../redux/constants"
 import StyledSwatch from "./styled-swatch";
 
@@ -19,14 +19,14 @@ class Swatch extends Component {
 
 
 function mapStateToProps(state) {
-    return {
-        state
-    }
+	return {
+		state
+	}
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-		changeColor
+	return bindActionCreators({
+		changeColor: doChangeColor
 	}, dispatch)
 }
 

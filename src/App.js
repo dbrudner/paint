@@ -9,7 +9,7 @@ const createReduxStore = applyMiddleware()(createStore);
 
 export default function App() {
 	return (
-		<Provider store={createReduxStore(rootReducer)}>
+		<Provider store={createReduxStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
 			<Paint />
 		</Provider>
 	)

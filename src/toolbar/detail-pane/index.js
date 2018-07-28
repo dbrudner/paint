@@ -28,8 +28,8 @@ class DetailPane extends Component {
 
 		return (
 			<DetailPaneContainer>
-				{paintMethod === types.drawLine ? <BrushSize handleChange={this.props.handleChange}/> : null}
-				{paintMethod === types.eraser ? <Eraser handleChange={this.props.handleChange}/> : null}
+				{paintMethod === types.DRAW_LINE ? <BrushSize handleChange={this.props.handleChange}/> : null}
+				{paintMethod === types.ERASER ? <Eraser handleChange={this.props.handleChange}/> : null}
 			</DetailPaneContainer>
 		)
 	}

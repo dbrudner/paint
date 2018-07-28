@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux';
-import { paintMethod } from './redux/get-paint-method';
-import { color } from "./redux/get-color";
-import { palette } from "./redux/get-palette";
-import { textStyle } from "./redux/get-text-style";
+import { paintMethodReducer } from './redux/paint-method';
+import { colorReducer } from "./redux/color";
+import { brushSizeReducer } from "./redux/brush-size";
+import { paletteReducer } from "./redux/palette";
+import { textStyleReducer } from "./redux/text-style";
 
 const rootReducer = combineReducers({
-    paintMethod,
-    color,
-    palette,
-    textStyle
+    paintMethod: paintMethodReducer,
+    color: colorReducer,
+    palette: paletteReducer,
+    textStyle: textStyleReducer,
+    brushSize: brushSizeReducer
 });
 
 export default rootReducer;

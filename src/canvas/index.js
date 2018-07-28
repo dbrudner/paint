@@ -56,32 +56,30 @@ class Canvas extends Component {
 		const { clientX, clientY } = e;
 		const method = this.props.state.paintMethod
 
-		console.log(method);
-
 		this.setState({
 			line: [[clientX, clientY]],
 			top, left
 		});
 
-		if (method === types.text && !this.state.textToolbarMounted) {
+		if (method === types.TEXT && !this.state.textToolbarMounted) {
 			return this.setState({ text: true, showTextToolbar: true, x: clientX, y: clientY, textToolbarMounted: true })
 		}
 
 		this.setState({ showTextToolbar: false, textToolbarMounted: false })
 
-		if (method === types.drawLine) {
+		if (method === types.DRAW_LINE) {
 			return this.setState({ drawing: true })
 		}
 
-		if (method === types.drawSquare) {
+		if (method === types.DRAW_RECT) {
 			return this.setState({ drawPreview: true })
 		}
 
-		if (method === types.eraser) {
+		if (method === types.ERASER) {
 			return this.setState({ drawing: true })
 		}
 
-		if (method === types.sprayPaintSelected) {
+		if (method === types.SPRAY_PAINT) {
 			return this.setState({ sprayPaint: true })
 		}
 	}
@@ -91,15 +89,15 @@ class Canvas extends Component {
 
 		this.setState({ method: "" })
 
-		if (method === types.drawLine) {
+		if (method === types.DRAW_LINE) {
 			return this.setState({ drawing: false })
 		}
 
-		if (method === types.sprayPaintSelected) {
+		if (method === types.SPRAY_PAINT) {
 			return this.setState({ sprayPaint: false })
 		}
 
-		if (method === types.drawSquare) {
+		if (method === types.DRAW_RECT) {
 			this.setState({ drawSquareMouseUp: true, drawPreview: false })
 			return this.drawSquare()
 		}
@@ -109,11 +107,11 @@ class Canvas extends Component {
 		const { clientX, clientY } = e;
 		this.setState({line: [...this.state.line, [clientX, clientY]]});
 
-		if (this.props.state.paintMethod === types.drawLine && this.state.drawing) {
+		if (this.props.state.paintMethod === types.DRAW_LINE && this.state.drawing) {
 			return this.drawLine()
 		};
 
-		if (this.props.state.paintMethod === types.sprayPaintSelected && this.state.sprayPaint) {
+		if (this.props.state.paintMethod === types.SPRAY_PAINT && this.state.sprayPaint) {
 			return this.spray();
 		}
 	}
@@ -143,7 +141,7 @@ class Canvas extends Component {
 		this.state.line.forEach(point => {
 			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
 			ctx.strokeStyle = this.props.state.color;
-			ctx.lineWidth = this.props.brushSize;
+			ctx.lineWidth = this.props.state.brushSize;
 			ctx.stroke();
 		});
 	}
@@ -156,8 +154,6 @@ class Canvas extends Component {
 		const top = this.state.line[0][1] - this.state.top + offset.top
 		const right = this.state.line[this.state.line.length - 1][0] - this.state.left
 		const bottom = this.state.line[this.state.line.length - 1][1] - this.state.top
-
-		console.log(left, top, right, bottom);
 
 		const width = Math.abs(left - right);
 		const height = Math.abs(top - bottom);
@@ -212,7 +208,7 @@ class Canvas extends Component {
 		console.log(x, y);
 
 		return (
-			<Container text={ this.props.state.paintMethod === types.text }>
+			<Container text={ this.props.state.paintMethod === types.TEXT }>
 				{ this.state.drawPreview ? this.drawPreview() : null }
 				{ this.state.showTextToolbar  ? <TextToolbar x={x} y={y} /> : null }
 				<canvas

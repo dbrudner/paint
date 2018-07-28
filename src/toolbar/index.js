@@ -5,9 +5,9 @@ import DetailPane from './detail-pane/'
 import ColorPicker from '../footer/color-picker'
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changePaintMethod } from "../redux/get-paint-method";
-import { changeColor } from "../redux/get-color";
-import { changePalette } from "../redux/get-palette";
+import { doChangePaintMethod } from "../redux/paint-method";
+import { doChangeColor } from "../redux/color";
+import { doUpdatePalette } from "../redux/palette";
 import * as types from "../redux/constants";
 
 const ToolBarContainer = styled.div`
@@ -41,13 +41,12 @@ class ToolBar extends Component {
 
 	changeToEraser = () => {
 		this.props.changeColor("white");
-		this.props.changePaintMethod(types.drawLine);
+		this.props.doChangePaintMethod(types.DRAW_LINE);
 	}
 
 	changeColor = color => {
 		this.props.changeColor(color);
-		console.log([color, ...this.props.state.palette.slice(0, this.props.state.palette.length - 1)])
-		this.props.changePalette([color, ...this.props.state.palette.slice(0, this.props.state.palette.length - 1)], types.getPalette)
+		this.props.changePalette(color, types.PALETTE_UPDATED)
 	}
 
 	render() {
@@ -55,15 +54,15 @@ class ToolBar extends Component {
 		return (
 			<ToolBarContainer>
 				<Button><i className="fas fa-bezier-curve"></i></Button>
-				<Button onClick={() => this.props.changePaintMethod(types.drawSquare)}><i className="fas fa-vector-square"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.DRAW_LINE)}><i className="fas fa-vector-square"></i></Button>
 				<Button onClick={() => this.changeToEraser()}><i className="fas fa-eraser"></i></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
-				<Button onClick={() => this.props.changePaintMethod(types.drawLine)}><i className="fas fa-paint-brush"></i></Button>
-				<Button onClick={() => this.props.changePaintMethod(types.sprayPaintSelected)}><i className="fas fa-spray-can"></i></Button>
-				<Button onClick={() => this.props.changePaintMethod(types.text)}><span style={{fontFamily: "times new roman", fontWeight: 700}}>A</span></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.DRAW_LINE)}><i className="fas fa-paint-brush"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.SPRAY_PAINT)}><i className="fas fa-spray-can"></i></Button>
+				<Button onClick={() => this.props.changePaintMethod(types.TEXT)}><span style={{fontFamily: "times new roman", fontWeight: 700}}>A</span></Button>
 				<Button></Button>
 				<Button></Button>
 				<Button></Button>
@@ -84,10 +83,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-		changePaintMethod,
-		changeColor,
-		changePalette
+	return bindActionCreators({
+		changePaintMethod: doChangePaintMethod,
+		changeColor: doChangeColor,
+		changePalette: doUpdatePalette
 	}, dispatch)
 }
 

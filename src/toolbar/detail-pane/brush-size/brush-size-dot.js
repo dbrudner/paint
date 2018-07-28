@@ -1,5 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { doChangeBrushSize } from "../../../redux/brush-size";
+import * as types from "../../../redux/constants";
 
 const Container = styled.button`
 	height: 10px;
@@ -39,13 +43,8 @@ const BrushSizeDot = props => {
 		transform: getTranslate(size)
 	}
 
-	const handleClick = size => {
-		props.handleChange("brushSize", size)
-		props.closeBrushWindow();
-	}
-
 	return (
-		<Container onClick={() => handleClick(size)} style={style}>
+		<Container onClick={() => props.updateBrushSize(size)} style={style}>
 			<svg style={svg} height={size} width={size}>
 				<circle cx={size/2} cy={size/2} r={size * .4} fill="black" />
 			</svg>
@@ -54,4 +53,10 @@ const BrushSizeDot = props => {
 	)
 }
 
-export default BrushSizeDot;
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+		updateBrushSize: doChangeBrushSize
+	}, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(BrushSizeDot)

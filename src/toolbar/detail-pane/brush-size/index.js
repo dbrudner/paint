@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import BrushSizeDot from './brush-size-dot'
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { changeBrushSize } from "../../../redux/get-brush-size";
-import * as types from "../../../redux/constants"
+
 const brushes = {
 	display: "flex",
 	flexWrap: "wrap",
@@ -13,17 +10,17 @@ const brushes = {
 const BrushesWindow = props => {
 	return <div>
 		<div style={brushes}>
-			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="6"/>
-			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="5"/>
-			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="4"/>
-			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="3"/>
-			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="2"/>
-			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} handleChange={props.handleChange} size="1"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} size="6"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} size="5"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} size="4"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} size="3"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} size="2"/>
+			<BrushSizeDot closeBrushWindow={props.closeBrushWindow} size="1"/>
 		</div>
 	</div>
 }
 
-class BrushSize extends Component {
+export default class BrushSize extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {open: false}
@@ -39,17 +36,3 @@ class BrushSize extends Component {
 		)
 	}
 }
-
-function mapStateToProps(state) {
-    return {
-        state
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-		changeBrushSize
-	}, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BrushSize)
