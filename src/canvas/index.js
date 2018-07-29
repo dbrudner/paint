@@ -126,7 +126,7 @@ class Canvas extends Component {
 		this.setState({line: [...this.state.line, [clientX, clientY]]});
 
 		if (this.props.state.paintMethod === types.DRAW_LINE && this.state.drawing) {
-			return this.drawLine()
+			return this.drawLine(this.state.line, this.props.state.color, this.props.state.brushSize)
 		};
 
 		if (this.props.state.paintMethod === types.SPRAY_PAINT && this.state.sprayPaint) {
@@ -151,15 +151,17 @@ class Canvas extends Component {
 		}
 	}
 
-	drawLine = () => {
-		if (!this.state.line[0]) return;
+	drawLine = (array, color, brushSize) => {
+		if (!array[0]) return;
 		const ctx = this.refs.canvas.getContext('2d');
+		const { left, top } = this.state
+
 		ctx.beginPath();
-		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
-		this.state.line.forEach(point => {
-			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
-			ctx.strokeStyle = this.props.state.color;
-			ctx.lineWidth = this.props.state.brushSize;
+		ctx.moveTo(array[0][0] - left, array[0][1] - top);
+		array.forEach(point => {
+			ctx.lineTo(point[0] - left, point[1] - top);
+			ctx.strokeStyle = color;
+			ctx.lineWidth = brushSize;
 			ctx.stroke();
 		});
 	}
@@ -242,17 +244,19 @@ class Canvas extends Component {
 		console.log({snapshots: this.state.snapshots});
 		this.state.snapshots.forEach(snapshot => {
 			if (snapshot.method === types.DRAW_LINE) {
-				ctx.beginPath();
-				console.log( snapshot.data[0][0] - this.state.left, snapshot.data[0][1] - this.state.top )
-				ctx.moveTo(snapshot.data[0][0] - this.state.left, snapshot.data[0][1] - this.state.top);
-				snapshot.data.forEach(point => {
-					const { color, brushSize } = snapshot;
+
+				this.drawLine(snapshot.data, snapshot.color, snapshot.brushSize);
+
+				// ctx.beginPath();
+				// ctx.moveTo(snapshot.data[0][0] - this.state.left, snapshot.data[0][1] - this.state.top);
+				// snapshot.data.forEach(point => {
+				// 	const { color, brushSize } = snapshot;
 					
-					ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
-					ctx.strokeStyle = color;
-					ctx.lineWidth = brushSize;
-					ctx.stroke();
-				})
+				// 	ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
+				// 	ctx.strokeStyle = color;
+				// 	ctx.lineWidth = brushSize;
+				// 	ctx.stroke();
+				// })
 			}
 		})
 	}
