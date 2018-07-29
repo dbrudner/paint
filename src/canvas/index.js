@@ -21,7 +21,7 @@ const Container = styled.div`
 	cursor: crosshair;
 
 	:focus {
-		border: none;
+		outline: none;
 	}
 
 	canvas {
@@ -95,7 +95,7 @@ class Canvas extends Component {
 
 			const { line, snapshots } = this.state
 
-			const data = [{...line}]
+			const data = [...line.slice(0, line.length - 1)]
 
 			const snapshot = {
 				method: types.DRAW_LINE,
@@ -164,19 +164,6 @@ class Canvas extends Component {
 		});
 	}
 
-	reDrawLine = () => {
-		if (!this.state.line[0]) return;
-		const ctx = this.refs.canvas.getContext('2d');
-		ctx.beginPath();
-		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
-		this.state.line.forEach(point => {
-			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
-			ctx.strokeStyle = this.props.state.color;
-			ctx.lineWidth = this.props.state.brushSize;
-			ctx.stroke();
-		});
-	}
-
 	drawPreview = () => {
 
 		const { offset } = this.state;
@@ -232,8 +219,10 @@ class Canvas extends Component {
 
 	undo = e => {
 		if (e.keyCode === 90 && e.ctrlKey) {
-			this.setState({ snapshots: [...this.state.snapshots.slice(0, this.state.snapshots.length - 1)] })
-			this.reDrawCanvas();
+			this.setState({ snapshots: [...this.state.snapshots.slice(0, this.state.snapshots.length - 1)] }, () => {
+				this.reDrawCanvas();
+			})
+			
 		}
 	}
 
@@ -253,11 +242,12 @@ class Canvas extends Component {
 		console.log({snapshots: this.state.snapshots});
 		this.state.snapshots.forEach(snapshot => {
 			if (snapshot.method === types.DRAW_LINE) {
-				console.log("redraw");
+				ctx.beginPath();
+				console.log( snapshot.data[0][0] - this.state.left, snapshot.data[0][1] - this.state.top )
+				ctx.moveTo(snapshot.data[0][0] - this.state.left, snapshot.data[0][1] - this.state.top);
 				snapshot.data.forEach(point => {
-
 					const { color, brushSize } = snapshot;
-
+					
 					ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
 					ctx.strokeStyle = color;
 					ctx.lineWidth = brushSize;
