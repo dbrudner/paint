@@ -42,7 +42,8 @@ class Canvas extends Component {
 			showTextToolbar: false,
 			textToolbarMounted: false,
 			text: false,
-			snapshots: []
+			snapshots: [],
+			mouseInsideCanvas: false
 		}
 	}
 
@@ -55,6 +56,7 @@ class Canvas extends Component {
 	handleChange = (name, value) => this.setState({[name]: value})
 
 	handleOnMouseDown = e => {
+		console.log(this.state.snapshots);
 		const canvas = document.getElementById("canvas");
 		const { top, left } = this.state.offset;
 		const { clientX, clientY } = e;
@@ -62,7 +64,9 @@ class Canvas extends Component {
 
 		this.setState({
 			line: [[clientX, clientY]],
-			top, left
+			top, 
+			left,
+			mouseInsideCanvas: true
 		});
 
 		if (method === types.TEXT && !this.state.textToolbarMounted) {
@@ -108,7 +112,9 @@ class Canvas extends Component {
 				snapshots: [...snapshots, snapshot]
 			})
 
-			return this.setState({ drawing: false })
+			return this.setState({ drawing: false }, () => {
+				console.log('hi');
+			})
 		}
 
 		if (method === types.SPRAY_PAINT) {
@@ -121,7 +127,14 @@ class Canvas extends Component {
 		}
 	}
 
+	handleOnMouseLeave = e => {
+		// Save line & stop drawing
+		this.handleOnMouseUp(e)
+		this.setState({ mouseInsideCanvas: false })
+	}
+
 	getPath = e => {
+		if (!this.state.mouseInsideCanvas) return;
 		const { clientX, clientY } = e;
 		this.setState({line: [...this.state.line, [clientX, clientY]]});
 
@@ -224,7 +237,6 @@ class Canvas extends Component {
 			this.setState({ snapshots: [...this.state.snapshots.slice(0, this.state.snapshots.length - 1)] }, () => {
 				this.reDrawCanvas();
 			})
-			
 		}
 	}
 
@@ -244,19 +256,7 @@ class Canvas extends Component {
 		console.log({snapshots: this.state.snapshots});
 		this.state.snapshots.forEach(snapshot => {
 			if (snapshot.method === types.DRAW_LINE) {
-
 				this.drawLine(snapshot.data, snapshot.color, snapshot.brushSize);
-
-				// ctx.beginPath();
-				// ctx.moveTo(snapshot.data[0][0] - this.state.left, snapshot.data[0][1] - this.state.top);
-				// snapshot.data.forEach(point => {
-				// 	const { color, brushSize } = snapshot;
-					
-				// 	ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
-				// 	ctx.strokeStyle = color;
-				// 	ctx.lineWidth = brushSize;
-				// 	ctx.stroke();
-				// })
 			}
 		})
 	}
@@ -271,10 +271,10 @@ class Canvas extends Component {
 				{this.state.text && <TextPreview offsetX={500} offsetY={100} color={this.props.state.color} textStyle={this.props.state.textStyle} /> }
 				<canvas
 					id="canvas"
-					onMouseMove={e => this.getPath(e)}
+					onMouseMove={this.getPath}
 					onMouseUp={this.handleOnMouseUp}
-					onMouseDown={e => this.handleOnMouseDown(e)}
-					onMouseLeave={() => this.setState({drawing: false})}
+					onMouseDown={this.handleOnMouseDown}
+					onMouseLeave={this.handleOnMouseLeave}
 					ref="canvas"
 					width="800px"
 					height="400px"
