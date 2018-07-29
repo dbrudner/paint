@@ -14,6 +14,8 @@ export default function DragAndDrop(WrappedComponent, offsetX, offsetY) {
 			super(props);
 
 			this.state = {
+				offsetX: null,
+				offsetY: null
 			}
 		}
 
@@ -36,7 +38,7 @@ export default function DragAndDrop(WrappedComponent, offsetX, offsetY) {
 			const { x, y } = this.props;
 			const { offsetX, offsetY } = this.state;
 			
-			console.log(this.props)
+			console.log( WrappedComponent, this.state.currentX,  this.state.currentY)
 
 			return (
 				<Container id="dragEl" draggable="true" onDragStart={this.getOffset} onDragEnd={this.reposition} x={ this.state.currentX - this.props.offsetX || x - this.props.offsetX } y={ this.state.currentY - this.props.offsetY || y - this.props.offsetY }>

@@ -18,6 +18,11 @@ const Container = styled.div`
 	border-top-color: #808080;
 	background-color: #7b7b7b;
 	padding: 10px;
+	cursor: crosshair;
+
+	:focus {
+		border: none;
+	}
 
 	canvas {
 		background-color: white;
@@ -36,7 +41,8 @@ class Canvas extends Component {
 			drawPreview: false,
 			showTextToolbar: false,
 			textToolbarMounted: false,
-			text: false
+			text: false,
+			snapshots: []
 		}
 	}
 
@@ -85,9 +91,23 @@ class Canvas extends Component {
 	handleOnMouseUp = e => {
 		const method = this.props.state.paintMethod
 
-		this.setState({ method: "" })
-
 		if (method === types.DRAW_LINE) {
+
+			const { line, snapshots } = this.state
+
+			const data = [{...line}]
+
+			const snapshot = {
+				method: types.DRAW_LINE,
+				data,
+				color: this.props.state.color,
+				brushSize: this.props.state.brushSize
+			}
+
+			this.setState({
+				snapshots: [...snapshots, snapshot]
+			})
+
 			return this.setState({ drawing: false })
 		}
 
@@ -132,6 +152,19 @@ class Canvas extends Component {
 	}
 
 	drawLine = () => {
+		if (!this.state.line[0]) return;
+		const ctx = this.refs.canvas.getContext('2d');
+		ctx.beginPath();
+		ctx.moveTo(this.state.line[0][0] - this.state.left, this.state.line[0][1] - this.state.top);
+		this.state.line.forEach(point => {
+			ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
+			ctx.strokeStyle = this.props.state.color;
+			ctx.lineWidth = this.props.state.brushSize;
+			ctx.stroke();
+		});
+	}
+
+	reDrawLine = () => {
 		if (!this.state.line[0]) return;
 		const ctx = this.refs.canvas.getContext('2d');
 		ctx.beginPath();
@@ -197,14 +230,51 @@ class Canvas extends Component {
 		this.setState({showTextToolbar: true})
 	}
 
+	undo = e => {
+		if (e.keyCode === 90 && e.ctrlKey) {
+			this.setState({ snapshots: [...this.state.snapshots.slice(0, this.state.snapshots.length - 1)] })
+			this.reDrawCanvas();
+		}
+	}
+
+	clearCanvas() {
+		const ctx = this.refs.canvas.getContext('2d');
+		const canvas = document.getElementById("canvas");
+		const { top, left, bottom, right } = canvas.getBoundingClientRect();
+		const width = right - left;
+		const height = bottom - top;
+
+		ctx.clearRect(0, 0, width, height);
+	}
+
+	reDrawCanvas = () => {
+		this.clearCanvas()
+		const ctx = this.refs.canvas.getContext('2d');
+		console.log({snapshots: this.state.snapshots});
+		this.state.snapshots.forEach(snapshot => {
+			if (snapshot.method === types.DRAW_LINE) {
+				console.log("redraw");
+				snapshot.data.forEach(point => {
+
+					const { color, brushSize } = snapshot;
+
+					ctx.lineTo(point[0] - this.state.left, point[1] - this.state.top);
+					ctx.strokeStyle = color;
+					ctx.lineWidth = brushSize;
+					ctx.stroke();
+				})
+			}
+		})
+	}
+
 	render() {
 		const { showTextToolbar, x, y } = this.state
 
 		return (
-			<Container text={ this.props.state.paintMethod === types.TEXT }>
+			<Container tabIndex="0" onKeyDown={this.undo} text={ this.props.state.paintMethod === types.TEXT }>
 				{ this.state.drawPreview && this.drawPreview() }
 				{ this.state.showTextToolbar && <TextToolbar offsetX={100} offsetY={100} x={x} y={y} /> }
-				{this.state.text && <TextPreview color={this.props.state.color} textStyle={this.props.state.textStyle} /> }				
+				{this.state.text && <TextPreview offsetX={500} offsetY={100} color={this.props.state.color} textStyle={this.props.state.textStyle} /> }
 				<canvas
 					id="canvas"
 					onMouseMove={e => this.getPath(e)}
